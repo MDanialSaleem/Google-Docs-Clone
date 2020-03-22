@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
 
 const styles = {
-    maxWidth : "170px"
+    width : "150px"
 };
 
 const NewDocCard = props => {
