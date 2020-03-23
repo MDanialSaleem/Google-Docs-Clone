@@ -1,12 +1,12 @@
 import React from 'react';
 import SignInUp from "./HomeContainer/SignInUp";
-import Editor from "./EditorContainer/Editor";
+import DocEditor from "./EditorContainer/DocEditor";
 import Documents from "./DocumentsContainer/Documents";
 
 function App() {
   return (
     <>
-    <Editor />
+    <DocEditor />
     </>
   );
 }
