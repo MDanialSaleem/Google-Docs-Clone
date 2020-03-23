@@ -1,6 +1,6 @@
 export default {
     type: 'paragraph',
     children: [
-        { text: 'A line of text in a paragraph.' }
+        { text: `Start writing here. The buttons do not work. However, you can make a selection bold by using ctrl+b` }
     ],
-}
+};
