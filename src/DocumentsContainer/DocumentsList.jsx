@@ -2,7 +2,6 @@ import React from "react";
 import DocumentItem from "./DocumentItem";
 import { Row, Col } from "react-grid-system";
 
-
 const DocumentList = () => {
     return (
         <Row justify="center">

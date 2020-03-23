@@ -1,19 +1,29 @@
-import React from "react";
+/** @jsx jsx */
+import { jsx } from "@emotion/core";
 import PropTypes from "prop-types";
 import {Row, Col} from "react-grid-system";
 import MoreVerticalIcon from "@material-ui/icons/MoreVert";
 import DocumentIcon from "@material-ui/icons/Description";
 import TextIcon from "@material-ui/icons/TextFormat";
 import PeopleIcon from "@material-ui/icons/People";
-
+import {useHistory} from "react-router-dom";
+import { Editor } from "../Utils/RoutingConstants";
 
 const DocumentItem = props => {
     const styles = {
-        padding : "10px 0px"
+        margin: "10px 0px",
+        padding: "5px 0px",
+        ":hover": {
+            backgroundColor: "lightblue",
+            cursor: "pointer"
+        }
     };
 
+    const history = useHistory();
+    const onClickHandler = () => history.push(Editor);
+
     return (
-        <div style={styles}>
+        <div css={styles} onClick={onClickHandler}>
             <Row>
                 <Col sm={1}>{props.type === "doc" ? <DocumentIcon /> : <TextIcon />}</Col>
                 <Col sm={5}>
