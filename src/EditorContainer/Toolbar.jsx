@@ -1,6 +1,6 @@
 import React from "react";
 import {Row, Col} from "react-grid-system";
-import DocumentIcon from "@material-ui/icons/Description";
+// import DocumentIcon from "@material-ui/icons/Description";
 import SubToolbar1 from "./SubToolbar1";
 import SubToolbar2 from "./SubToolbar2";
 
@@ -10,7 +10,7 @@ import SubToolbar2 from "./SubToolbar2";
 const Toolbar = () => (
     <>
         <Row align="center">
-            <Col xs={1}><DocumentIcon /></Col>
+            {/* <Col xs={1}><DocumentIcon /></Col> */}
             <Col><h4>Name</h4></Col>
         </Row>
         <SubToolbar1 />

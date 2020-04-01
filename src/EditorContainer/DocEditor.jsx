@@ -1,28 +1,34 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { createEditor } from 'slate'; //basis slate functions. things like helpers, transforms.
-import { Slate, Editable, withReact } from 'slate-react'; //what makes slate work with react.
-import CustomRenderers from "./EditorUtils/CustomRenderers"; //custom renderers that i developed.
-import EventHandlers from "./EditorUtils/EventHandlers"; //event handlers.
-import InitialValue from "./EditorUtils/InitialValue"; //initial value of text.
+import React, { useCallback, useMemo, useState } from 'react'
+import isHotkey from 'is-hotkey'
+import { Editable, withReact, useSlate, Slate } from 'slate-react'
+import { Editor, Transforms, createEditor } from 'slate'
+import { withHistory } from 'slate-history'
 
-//might seem superfluous to keep all of this in separate files but over time I expect these
-//to become really complex, hence.
+import CustomElements from "./EditorUtils/CustomElements";
+import initialValue from "./EditorUtils/InitialValue";
+import EventHandlers from './EditorUtils/EventHandlers'
 
 
-const DocEditor = () => {
-  const elementRenderer = useCallback(CustomRenderers.elementRenderer, [])
-  const leadRenderer = useCallback(CustomRenderers.leafRenderer, [])
-  //useMemo because uh, otherwise things get hecked.
-  const editor = useMemo(() => withReact(createEditor()), []); 
-  const [value, setValue] = useState([{...InitialValue}]);
-  const keyDownHandler = event => EventHandlers.keyDown(event, editor);
 
-  
+
+const RichTextExample = () => {
+  const [value, setValue] = useState(initialValue)
+  const renderElement = useCallback(props => <CustomElements.Element {...props} />, [])
+  const renderLeaf = useCallback(props => <CustomElements.Leaf {...props} />, [])
+  const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+
   return (
     <Slate editor={editor} value={value} onChange={value => setValue(value)}>
-      <Editable renderElement={elementRenderer} renderLeaf={leadRenderer} onKeyDown={keyDownHandler}/>
+      <Editable
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+        placeholder="Enter some rich text…"
+        spellCheck
+        autoFocus
+        onKeyDown={event => EventHandlers.keyDown(event, editor)}
+      />
     </Slate>
   )
-};
+}
 
-export default DocEditor;
+export default RichTextExample
