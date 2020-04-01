@@ -1,13 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import isHotkey from 'is-hotkey'
-import { Editable, withReact, useSlate, Slate } from 'slate-react'
-import { Editor, Transforms, createEditor } from 'slate'
+import { Editable, withReact, Slate } from 'slate-react'
+import { createEditor } from 'slate'
 import { withHistory } from 'slate-history'
-
 import CustomElements from "./EditorUtils/CustomElements";
 import initialValue from "./EditorUtils/InitialValue";
 import EventHandlers from './EditorUtils/EventHandlers'
-
+import SubToolBar2 from './SubToolbar2'
 
 
 
@@ -17,8 +15,10 @@ const RichTextExample = () => {
   const renderLeaf = useCallback(props => <CustomElements.Leaf {...props} />, [])
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
 
+
   return (
     <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+      <SubToolBar2 />
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}

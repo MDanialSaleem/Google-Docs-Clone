@@ -14,7 +14,6 @@ const Toolbar = () => (
             <Col><h4>Name</h4></Col>
         </Row>
         <SubToolbar1 />
-        <SubToolbar2 />
     </>
 );
 

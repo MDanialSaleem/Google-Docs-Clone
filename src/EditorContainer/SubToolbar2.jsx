@@ -1,5 +1,32 @@
 import React from "react";
 import {Row, Col} from "react-grid-system";
+import {useSlate} from "slate-react";
+import {Button} from "semantic-ui-react";
+import CustomHelpers from "./EditorUtils/CustomHelpers";
+
+const LeafLevelButton = (props) => {
+
+    const editor = useSlate();
+    let active=CustomHelpers.isMarkActive(editor, props.effect);
+    let styles ={};
+    if(active)
+    {
+      styles = {
+        color: "blue"
+      };
+    }
+    return (
+      <Button
+        onMouseDown={event => {
+          event.preventDefault()
+          CustomHelpers.toggleMark(editor, props.effect);
+        }}
+        style={styles}
+      >
+          {props.effect[0]}
+      </Button>
+    )
+}
 
 
 const SubToolBar2 = () => (
@@ -16,11 +43,9 @@ const SubToolBar2 = () => (
                 <input type="number" value={10} />
             </Col>
             <Col sm={2}>
-                <button><strong>B</strong></button>
-                <span>|</span>
-                <button><em>I</em></button>
-                <span>|</span>
-                <button><u>U</u></button>
+                <LeafLevelButton effect="bold" />
+                <LeafLevelButton effect="italic" />
+                <LeafLevelButton effect="underline" />
             </Col>
             <Col sm={1}>
                 {/* placeholder for color picker. */}
