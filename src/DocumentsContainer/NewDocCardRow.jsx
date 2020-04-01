@@ -1,6 +1,5 @@
 import React from "react";
 import NewDocCard from "./NewDocCard";
-import Typography from '@material-ui/core/Typography';
 import BlankImg from "../Assets/Images/Templates/Blank.png";
 import ResumeImg from "../Assets/Images/Templates/Resume.png";
 import {Row, Col} from "react-grid-system";
@@ -9,7 +8,6 @@ import ProjectProposalImg from "../Assets/Images/Templates/ProjectProposal.png";
 import BrochureImg from "../Assets/Images/Templates/Brochure.png";
 import RecipeImg from "../Assets/Images/Templates/Recipe.png";
 
-
 const styles = {
     background : "lightgrey",
     padding: "20px 0px"
@@ -17,13 +15,14 @@ const styles = {
 
 const NewDocCardRow = () => 
 <div style={styles}>
-    <Row justify="center">
+    <Row style={{paddingBottom: "5px"}} justify="center">
         <Col xs={3}>
-            <Typography gutterBottom variant="h5" component="h2">
-                Create A New Document        
-            </Typography>
+                <h3>
+                    Create A New Document 
+                </h3>       
         </Col>
     </Row>
+
     <Row justify="center">
         <Col xs="content">
             <NewDocCard title="Blank" imageUrl={BlankImg}/>

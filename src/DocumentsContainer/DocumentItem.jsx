@@ -2,10 +2,7 @@
 import { jsx } from "@emotion/core";
 import PropTypes from "prop-types";
 import {Row, Col} from "react-grid-system";
-import MoreVerticalIcon from "@material-ui/icons/MoreVert";
-import DocumentIcon from "@material-ui/icons/Description";
-import TextIcon from "@material-ui/icons/TextFormat";
-import PeopleIcon from "@material-ui/icons/People";
+import {Icon} from "semantic-ui-react";
 import {useHistory} from "react-router-dom";
 import { Editor } from "../Utils/RoutingConstants";
 
@@ -25,20 +22,21 @@ const DocumentItem = props => {
     return (
         <div css={styles} onClick={onClickHandler}>
             <Row>
-                <Col sm={1}>{props.type === "doc" ? <DocumentIcon /> : <TextIcon />}</Col>
+                {/* deprecating the types of documents for now. */}
+                <Col sm={1}>{props.type === "doc" ? <Icon name="file word" /> : <Icon name="file word" /> }</Col>
                 <Col sm={5}>
                     <Row justify="start">
                         <Col xs="content">
                             {props.name}
                         </Col>
                         <Col xs={1}>
-                            {props.isShared ? <PeopleIcon /> : null } 
+                            {props.isShared ? <Icon name="users" /> : null } 
                         </Col>
                     </Row>
                 </Col>
                 <Col sm={2}>{props.owner}</Col>
                 <Col sm={2}>{props.timeAccessed}</Col>
-                <Col sm={2}><MoreVerticalIcon /></Col>
+                <Col sm={2}><Icon name="ellipsis vertical" /></Col>
             </Row>
         </div>
     );
