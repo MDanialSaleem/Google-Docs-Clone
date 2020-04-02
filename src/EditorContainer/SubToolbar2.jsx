@@ -27,6 +27,21 @@ const LeafLevelButton = props => {
     );
 };
 
+const BlockLevelButton = props => {
+    const editor = useSlate();
+    return (
+        <Button
+            active={CustomHelpers.isBlockActive(editor, props.effect)}
+            onMouseDown={event => {
+                event.preventDefault();
+                CustomHelpers.toggleBlock(editor, props.effect);
+            }}
+        >
+            {props.effect[0]}
+        </Button>
+    );
+};
+
 const FontChanger = () => {
     const editor = useSlate();
     const [value, changeValue] = useState(Fonts.Arial);
@@ -45,7 +60,6 @@ const FontChanger = () => {
     );
 };
 
-
 const FontSizeChanger = () => {
     const editor = useSlate();
     const [value, changeValue] = useState(15);
@@ -56,30 +70,41 @@ const FontSizeChanger = () => {
     };
 
     return (
-        <input type="number" defaultValue={value} min="1" 
-          onKeyUp={handleChange} onChange={handleChange}/>
+        <input
+            type="number"
+            defaultValue={value}
+            min="1"
+            onKeyUp={handleChange}
+            onChange={handleChange}
+        />
     );
 };
 
 const SubToolBar2 = () => (
     <>
         <Row>
-            <Col sm={3}>
+            <Col md={3}>
                 <FontChanger />
             </Col>
-            <Col sm={2}>
+            <Col md={2}>
                 <FontSizeChanger />
             </Col>
-            <Col sm={2}>
+            <Col md={2}>
                 <LeafLevelButton effect="bold" />
                 <LeafLevelButton effect="italic" />
                 <LeafLevelButton effect="underline" />
             </Col>
-            <Col sm={1}>
+            <Col md={1}>
                 {/* placeholder for color picker. */}
                 <span style={{ color: "blue", backgroundColor: "blue" }}>
                     PL
                 </span>
+            </Col>
+            <Col md={3}>
+                <BlockLevelButton effect="heading-one" />
+                <BlockLevelButton effect="heading-two" />
+                <BlockLevelButton effect="numbered-list" />
+                <BlockLevelButton effect="bulleted-list" />
             </Col>
         </Row>
     </>

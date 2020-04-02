@@ -12,7 +12,7 @@ const Editor = () => {
     <div>
         <Toolbar />
         <Row css={style} justify="center">
-            <Col style={{backgroundColor:"lightgrey"}}  xs={10}>
+            <Col style={{backgroundColor:"lightblue"}}  xs={10}>
                 <DocEditor />
             </Col>
         </Row>

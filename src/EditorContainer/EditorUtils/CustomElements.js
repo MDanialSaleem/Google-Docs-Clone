@@ -1,4 +1,5 @@
 import React from "react";
+import { Editor } from "slate";
 
 export default {
     Leaf: ({ attributes, children, leaf }) => {
@@ -47,8 +48,6 @@ export default {
 
     Element: ({ attributes, children, element }) => {
         switch (element.type) {
-            case "block-quote":
-                return <blockquote {...attributes}>{children}</blockquote>;
             case "bulleted-list":
                 return <ul {...attributes}>{children}</ul>;
             case "heading-one":

@@ -3,6 +3,10 @@ const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
 const CustomHelpers = {
     toggleBlock: (editor, format) => {
+        if(format === "heading-one" || format === "heading-two")
+        {
+            Editor.removeMark(editor, "fontsize");
+        }
         const isActive = CustomHelpers.isBlockActive(editor, format);
         const isList = LIST_TYPES.includes(format);
 
@@ -33,7 +37,7 @@ const CustomHelpers = {
 
     isMarkActiveWOV: (editor, format) => {
         const marks = Editor.marks(editor);
-        return marks ? marks[format] === true : false;
+        return marks ? !!marks[format] : false;
     },
 
     toggleMarksWV: (editor, format, value) => {
@@ -63,8 +67,14 @@ const CustomHelpers = {
     },
 
     isMarkActive: (editor, format, value) => {
-        const marks = Editor.marks(editor);
-        return marks ? !!marks[format] : false;
+        switch (format) {
+            case "color":
+            case "font":
+            case "fontsize":
+                break;
+            default:
+                return CustomHelpers.isMarkActiveWOV(editor, format);
+        }
     }
 };
 
