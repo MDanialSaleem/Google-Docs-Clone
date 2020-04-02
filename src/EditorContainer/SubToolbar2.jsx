@@ -1,49 +1,63 @@
-import React, {useState} from "react";
-import {Row, Col} from "react-grid-system";
-import {useSlate} from "slate-react";
-import {Button} from "semantic-ui-react";
+import React, { useState } from "react";
+import { Row, Col } from "react-grid-system";
+import { useSlate } from "slate-react";
+import { Button } from "semantic-ui-react";
 import CustomHelpers from "./EditorUtils/CustomHelpers";
 import Fonts from "../Utils/Fonts";
 
-const LeafLevelButton = (props) => {
-
+const LeafLevelButton = props => {
     const editor = useSlate();
-    let active=CustomHelpers.isMarkActive(editor, props.effect);
-    let styles ={};
-    if(active)
-    {
-      styles = {
-        color: "blue"
-      };
+    let active = CustomHelpers.isMarkActive(editor, props.effect);
+    let styles = {};
+    if (active) {
+        styles = {
+            color: "blue"
+        };
     }
     return (
-      <Button
-        onMouseDown={event => {
-          event.preventDefault()
-          CustomHelpers.toggleMark(editor, props.effect);
-        }}
-        style={styles}
-      >
-          {props.effect[0]}
-      </Button>
-    )
+        <Button
+            onMouseDown={event => {
+                event.preventDefault();
+                CustomHelpers.toggleMark(editor, props.effect);
+            }}
+            style={styles}
+        >
+            {props.effect[0]}
+        </Button>
+    );
 };
 
 const FontChanger = () => {
-  const editor = useSlate();
-  const [value, changeValue] = useState(Fonts.Arial);
-  
-  const handleChange = (event) => {
-    changeValue(event.target.value);
-    CustomHelpers.toggleMark(editor, "font", event.target.value);
-  }
+    const editor = useSlate();
+    const [value, changeValue] = useState(Fonts.Arial);
+
+    const handleChange = event => {
+        changeValue(event.target.value);
+        CustomHelpers.toggleMark(editor, "font", event.target.value);
+    };
     return (
-      <select value={value} onChange={handleChange}>
-        <option value={Fonts.Arial}>Arial</option>
-        <option value={Fonts.Monospace}>Monospace</option>
-        <option value={Fonts.TimesNewRoman}>TimesNewRoman</option>
-        <option value={Fonts.Impact}>Impact</option>
-      </select>
+        <select value={value} onChange={handleChange}>
+            <option value={Fonts.Arial}>Arial</option>
+            <option value={Fonts.Monospace}>Monospace</option>
+            <option value={Fonts.TimesNewRoman}>TimesNewRoman</option>
+            <option value={Fonts.Impact}>Impact</option>
+        </select>
+    );
+};
+
+
+const FontSizeChanger = () => {
+    const editor = useSlate();
+    const [value, changeValue] = useState(15);
+
+    const handleChange = event => {
+        changeValue(event.target.value);
+        CustomHelpers.toggleMark(editor, "fontsize", event.target.value);
+    };
+
+    return (
+        <input type="number" defaultValue={value} min="1" 
+          onKeyUp={handleChange} onChange={handleChange}/>
     );
 };
 
@@ -51,10 +65,10 @@ const SubToolBar2 = () => (
     <>
         <Row>
             <Col sm={3}>
-              <FontChanger />
+                <FontChanger />
             </Col>
             <Col sm={2}>
-                <input type="number" defaultValue={10} />
+                <FontSizeChanger />
             </Col>
             <Col sm={2}>
                 <LeafLevelButton effect="bold" />
@@ -63,7 +77,9 @@ const SubToolBar2 = () => (
             </Col>
             <Col sm={1}>
                 {/* placeholder for color picker. */}
-            <span style={{color: "blue", backgroundColor: "blue"}}>PL</span>
+                <span style={{ color: "blue", backgroundColor: "blue" }}>
+                    PL
+                </span>
             </Col>
         </Row>
     </>

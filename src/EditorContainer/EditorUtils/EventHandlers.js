@@ -1,6 +1,7 @@
 import CustomeHelpers from "./CustomHelpers";
 import isHotkey from "is-hotkey";
 import Fonts from "../../Utils/Fonts";
+import CustomHelpers from "./CustomHelpers";
 
 const HOTKEYS = {
     "mod+b": "bold",

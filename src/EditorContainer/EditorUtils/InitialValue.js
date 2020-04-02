@@ -4,7 +4,7 @@ const initialValue = [
     {
       type: 'paragraph',
       children: [
-        { text: 'This is editable ', font: Fonts.Arial },
+        { text: 'This is editable ', font: Fonts.Arial, fontsize: "15" },
       ],
     }
 ];

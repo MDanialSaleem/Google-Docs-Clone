@@ -38,14 +38,19 @@ const CustomHelpers = {
 
     toggleMarksWV: (editor, format, value) => {
         //deals with marks that do have a value.
+        console.log(format, value);
         Editor.addMark(editor, format, value);
     },
 
     toggleMark: (editor, format, value = null) => {
-        if (format === "color" || format === "font") {
-            CustomHelpers.toggleMarksWV(editor, format, value);
-        } else {
-            CustomHelpers.toggleMarksWOV(editor, format);
+        switch (format) {
+            case "color":
+            case "font":
+            case "fontsize":
+                CustomHelpers.toggleMarksWV(editor, format, value);
+                break;
+            default:
+                CustomHelpers.toggleMarksWOV(editor, format);
         }
     },
 
