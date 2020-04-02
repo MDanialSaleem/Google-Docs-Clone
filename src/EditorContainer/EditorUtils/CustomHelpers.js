@@ -1,4 +1,4 @@
-import {Transforms, Editor, Text } from "slate";
+import {Transforms, Editor} from "slate";
 const LIST_TYPES = ['numbered-list', 'bulleted-list']
 
 const CustomHelpers = {
@@ -21,13 +21,13 @@ const CustomHelpers = {
     }
   },
   
-  toggleMark : (editor, format) => {
+  toggleMark : (editor, format, value = null) => {
     const isActive = CustomHelpers.isMarkActive(editor, format)
   
     if (isActive) {
       Editor.removeMark(editor, format)
     } else {
-      Editor.addMark(editor, format, true)
+      Editor.addMark(editor, format, format === "color" ? value : true)
     }
   },
   
@@ -41,7 +41,7 @@ const CustomHelpers = {
   
   isMarkActive : (editor, format) => {
     const marks = Editor.marks(editor)
-    return marks ? marks[format] === true : false
+    return marks ? !!marks[format] : false
   }
 }
 

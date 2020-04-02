@@ -2,18 +2,26 @@ import React from "react";
 
 export default {
     Leaf : ({ attributes, children, leaf }) => {
-        if (leaf.bold) {
-        children = <strong>{children}</strong>
-        }
-        if (leaf.italic) {
-        children = <em>{children}</em>
-        }
+      let styles = {};
+      if (leaf.bold) {
+        children = <strong>{children}</strong>;
+      }
+      if (leaf.italic) {
+        children = <em>{children}</em>;
+      }
 
-        if (leaf.underline) {
-        children = <u>{children}</u>
-        }
+      if (leaf.underline) {
+        children = <u>{children}</u>;
+      }
+      if(leaf.color) {
+        console.log("lead")
+        styles = {
+          ...styles,
+          color: leaf.color
+        };
+      }
 
-        return <span {...attributes}>{children}</span>
+      return <span style={styles} {...attributes}>{children}</span>
     },
       
 
