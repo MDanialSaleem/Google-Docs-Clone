@@ -3,9 +3,9 @@ import isHotkey from "is-hotkey";
 
 
 const HOTKEYS = {
-    "mod+b": "bold",
-    "mod+i": "italic",
-    "mod+u": "underline"
+    "mod+b": "left-align",
+    "mod+i": "center-align",
+    "mod+u": "right-align"
 };
 
 export default {
@@ -14,7 +14,8 @@ export default {
             if (isHotkey(hotkey, event)) {
                 event.preventDefault();
                 const mark = HOTKEYS[hotkey];
-                CustomeHelpers.toggleMark(editor, mark);
+                CustomeHelpers.toggleAlignment(editor, mark);
+                // CustomeHelpers.toggleMark(editor, mark);
             }
         }
     }

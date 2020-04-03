@@ -47,6 +47,12 @@ const CustomHelpers = {
         }
     },
 
+    toggleAlignment: (editor, alignment) => {
+        Transforms.setNodes(editor, {
+            alignment: alignment
+        });
+    },
+
     toggleMarksWOV: (editor, format) => {
         //this deals with marks without any value such as bold italic etc.
         const isActive = CustomHelpers.isMarkActive(editor, format);
@@ -64,7 +70,6 @@ const CustomHelpers = {
 
     toggleMarksWV: (editor, format, value) => {
         //deals with marks that do have a value.
-        console.log(format, value);
         Editor.addMark(editor, format, value);
     },
 
@@ -97,6 +102,14 @@ const CustomHelpers = {
             default:
                 return CustomHelpers.isMarkActiveWOV(editor, format);
         }
+    },
+
+    isAlignmentActive: (editor, alignment) => {
+        const [match] = Editor.nodes(editor, {
+            match: n => n.alignment === alignment
+        });
+
+        return !!match;
     }
 };
 

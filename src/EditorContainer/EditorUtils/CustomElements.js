@@ -46,20 +46,40 @@ export default {
     },
 
     Element: ({ attributes, children, element }) => {
-        
+
+        let alignStyles = {
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+        };
+
+        switch(element.alignment) {
+            case "left-align":
+                alignStyles.justifyContent = "left";
+                break;
+            case "center-align":
+                alignStyles.justifyContent = "center";
+                break;
+            case "right-align":
+                alignStyles.justifyContent = "right";
+                break;
+            default:
+
+        }
+
         switch (element.type) {
             case "bulleted-list":
-                return <ul {...attributes}>{children}</ul>;
+                return <ul style={alignStyles}  {...attributes}>{children}</ul>;
             case "heading-one":
-                return <h1 {...attributes}>{children}</h1>;
+                return <h1 style={alignStyles}  {...attributes}>{children}</h1>;
             case "heading-two":
-                return <h2 {...attributes}>{children}</h2>;
+                return <h2 style={alignStyles}  {...attributes}>{children}</h2>;
             case "list-item":
-                return <li {...attributes}>{children}</li>;
+                return <li  {...attributes}>{children}</li>;
             case "numbered-list":
-                return <ol {...attributes}>{children}</ol>;
+                return <ol style={alignStyles}  {...attributes}>{children}</ol>;
             default:
-                return <p {...attributes}>{children}</p>;
+                return <p  style={alignStyles} {...attributes}>{children}</p>;
         }
     },
     DefaultElement: props => {
