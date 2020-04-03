@@ -1,39 +1,40 @@
 import React from "react";
+import StyleConstants from "./StyleConstants";
 
 export default {
     Leaf: ({ attributes, children, leaf }) => {
         let styles = {};
 
-        if (leaf.bold) {
+        if (leaf[StyleConstants.BOLD]) {
             children = <strong>{children}</strong>;
         }
 
-        if (leaf.italic) {
+        if (leaf[StyleConstants.ITALIC]) {
             children = <em>{children}</em>;
         }
 
-        if (leaf.underline) {
+        if (leaf[StyleConstants.ITALIC]) {
             children = <u>{children}</u>;
         }
 
-        if (leaf.font) {
+        if (leaf[StyleConstants.FONT]) {
             styles = {
                 ...styles,
-                fontFamily: leaf.font
+                fontFamily: leaf[StyleConstants.FONT]
             };
         }
 
-        if (leaf.color) {
+        if (leaf[StyleConstants.TEXT_COLOR]) {
             styles = {
                 ...styles,
-                color: "blue"
+                color: leaf[StyleConstants.TEXT_COLOR]
             };
         }
 
-        if(leaf.fontsize) {
+        if(leaf[StyleConstants.FONT_SIZE]) {
             styles = {
                 ...styles,
-                fontSize: leaf.fontsize + "px"
+                fontSize: leaf[StyleConstants.FONT_SIZE] + "px"
             };
         }
 
@@ -52,14 +53,14 @@ export default {
             flexWrap: "wrap",
         };
 
-        switch(element.alignment) {
-            case "left-align":
+        switch(element[StyleConstants.ALIGNMENT]) {
+            case StyleConstants.ALIGNMENT_TYPE.ALIGN_LEFT:
                 alignStyles.justifyContent = "left";
                 break;
-            case "center-align":
+            case StyleConstants.ALIGNMENT_TYPE.ALIGN_CENTER:
                 alignStyles.justifyContent = "center";
                 break;
-            case "right-align":
+            case StyleConstants.ALIGNMENT_TYPE.ALIGN_RIGHT:
                 alignStyles.justifyContent = "right";
                 break;
             default:
@@ -67,15 +68,15 @@ export default {
         }
 
         switch (element.type) {
-            case "bulleted-list":
+            case StyleConstants.BULLETTED_LIST:
                 return <ul style={alignStyles}  {...attributes}>{children}</ul>;
-            case "heading-one":
+            case StyleConstants.HEADINE_ONE:
                 return <h1 style={alignStyles}  {...attributes}>{children}</h1>;
-            case "heading-two":
+            case StyleConstants.HEADING_TWO:
                 return <h2 style={alignStyles}  {...attributes}>{children}</h2>;
-            case "list-item":
+            case StyleConstants.LIST_ITEM:
                 return <li  {...attributes}>{children}</li>;
-            case "numbered-list":
+            case StyleConstants.NUMBERED_LIST:
                 return <ol style={alignStyles}  {...attributes}>{children}</ol>;
             default:
                 return <p  style={alignStyles} {...attributes}>{children}</p>;

@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import { Row, Col } from "react-grid-system";
 import { useSlate } from "slate-react";
 import CustomHelpers from "./EditorUtils/CustomHelpers";
-import Fonts from "../Utils/Fonts";
+import Fonts from "./EditorUtils/Fonts";
 import { Popup, Button } from "semantic-ui-react";
 import { CirclePicker } from 'react-color';
+import StyleConstants from "./EditorUtils/StyleConstants";
 
 const ColorChanger = () => {
     const editor = useSlate();
 
     const onClickHandler = (color, event) => {
         event.preventDefault();
-        CustomHelpers.toggleMark(editor, "color", color.hex);
+        CustomHelpers.toggleMark(editor, StyleConstants.TEXT_COLOR, color.hex);
     };
 
     return (
@@ -67,7 +68,7 @@ const FontChanger = () => {
 
     const handleChange = event => {
         changeValue(event.target.value);
-        CustomHelpers.toggleMark(editor, "font", event.target.value);
+        CustomHelpers.toggleMark(editor, StyleConstants.FONT, event.target.value);
     };
     return (
         <select value={value} onChange={handleChange}>
@@ -85,7 +86,7 @@ const FontSizeChanger = () => {
 
     const handleChange = event => {
         changeValue(event.target.value);
-        CustomHelpers.toggleMark(editor, "fontsize", event.target.value);
+        CustomHelpers.toggleMark(editor, StyleConstants.FONT_SIZE, event.target.value);
     };
 
     return (
@@ -109,19 +110,18 @@ const SubToolBar2 = () => (
                 <FontSizeChanger />
             </Col>
             <Col md={2}>
-                <LeafLevelButton effect="bold" />
-                <LeafLevelButton effect="italic" />
-                <LeafLevelButton effect="underline" />
+                <LeafLevelButton effect={StyleConstants.BOLD} />
+                <LeafLevelButton effect={StyleConstants.ITALIC} />
+                <LeafLevelButton effect={StyleConstants.UNDERLINE} />
             </Col>
             <Col md={1}>
                 <ColorChanger />
             </Col>
             <Col md={4}>
-                <BlockLevelButton effect="heading-one" />
-                <BlockLevelButton effect="heading-two" />
-                <BlockLevelButton effect="numbered-list" />
-                <BlockLevelButton effect="bulleted-list" />
-                <BlockLevelButton effect="align-right" />
+                <BlockLevelButton effect={StyleConstants.HEADINE_ONE} />
+                <BlockLevelButton effect={StyleConstants.HEADING_TWO} />
+                <BlockLevelButton effect={StyleConstants.NUMBERED_LIST} />
+                <BlockLevelButton effect={StyleConstants.BULLETTED_LIST} />
             </Col>
         </Row>
     </>

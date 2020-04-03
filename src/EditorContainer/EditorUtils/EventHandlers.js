@@ -1,11 +1,11 @@
 import CustomeHelpers from "./CustomHelpers";
 import isHotkey from "is-hotkey";
-
+import StyleConstants from "./StyleConstants";
 
 const HOTKEYS = {
-    "mod+b": "left-align",
-    "mod+i": "center-align",
-    "mod+u": "right-align"
+    "mod+b": StyleConstants.ALIGNMENT_TYPE.ALIGN_LEFT,
+    "mod+i": StyleConstants.ALIGNMENT_TYPE.ALIGN_CENTER,
+    "mod+u": StyleConstants.ALIGNMENT_TYPE.ALIGN_RIGHT
 };
 
 export default {

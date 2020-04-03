@@ -1,4 +1,5 @@
 import { Transforms, Editor } from "slate";
+import  StyleConstants from "./StyleConstants";
 const LIST_TYPES = ["numbered-list", "bulleted-list", "list-item"];
 
 const CustomHelpers = {
@@ -11,8 +12,8 @@ const CustomHelpers = {
         //convert that into a paraggraph.
 
         //removes custom font size if set for the heading.
-        if (format === "heading-one" || format === "heading-two") {
-            Editor.removeMark(editor, "fontsize");
+        if (format === StyleConstants.HEADINE_ONE || format === StyleConstants.HEADING_TWO) {
+            Editor.removeMark(editor, StyleConstants.FONT_SIZE);
         }
 
         //if the selection has lists unwrap it. look at the paragraph above for more 
@@ -27,13 +28,13 @@ const CustomHelpers = {
 
         if (isActive) {
             Transforms.setNodes(editor, {
-                type: "paragraph"
+                type: StyleConstants.PARAGRAPH
             });
         }
         else {
             if(isList) {
                 Transforms.setNodes(editor, {
-                    type: "list-item"
+                    type: StyleConstants.LIST_ITEM
                 });
                 const block = { type: format, children: [] };
                 Transforms.wrapNodes(editor, block);
@@ -49,7 +50,7 @@ const CustomHelpers = {
 
     toggleAlignment: (editor, alignment) => {
         Transforms.setNodes(editor, {
-            alignment: alignment
+            [StyleConstants.ALIGNMENT]: alignment
         });
     },
 
@@ -75,9 +76,9 @@ const CustomHelpers = {
 
     toggleMark: (editor, format, value = null) => {
         switch (format) {
-            case "color":
-            case "font":
-            case "fontsize":
+            case StyleConstants.TEXT_COLOR:
+            case StyleConstants.FONT:
+            case StyleConstants.FONT_SIZE:
                 CustomHelpers.toggleMarksWV(editor, format, value);
                 break;
             default:
@@ -95,9 +96,9 @@ const CustomHelpers = {
 
     isMarkActive: (editor, format, value) => {
         switch (format) {
-            case "color":
-            case "font":
-            case "fontsize":
+            case StyleConstants.TEXT_COLOR:
+            case StyleConstants.FONT:
+            case StyleConstants.FONT_SIZE:
                 break;
             default:
                 return CustomHelpers.isMarkActiveWOV(editor, format);

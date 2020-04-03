@@ -1,4 +1,4 @@
-import Fonts from "../../Utils/Fonts";
+import Fonts from "./Fonts";
 
 const initialValue = [
     {
