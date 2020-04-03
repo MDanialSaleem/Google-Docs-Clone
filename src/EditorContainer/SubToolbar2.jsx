@@ -1,9 +1,28 @@
 import React, { useState } from "react";
 import { Row, Col } from "react-grid-system";
 import { useSlate } from "slate-react";
-import { Button } from "semantic-ui-react";
 import CustomHelpers from "./EditorUtils/CustomHelpers";
 import Fonts from "../Utils/Fonts";
+import { Popup, Button } from "semantic-ui-react";
+import { CirclePicker } from 'react-color';
+
+const ColorChanger = () => {
+    const editor = useSlate();
+
+    const onClickHandler = (color, event) => {
+        event.preventDefault();
+        CustomHelpers.toggleMark(editor, "color", color.hex);
+    };
+
+    return (
+        <Popup trigger={<Button>C</Button>} position="bottom center" hoverable>
+            <Popup.Header>Pick Text Color</Popup.Header>
+            <Popup.Content>
+                <CirclePicker onChangeComplete={ onClickHandler } />
+            </Popup.Content>
+        </Popup>
+    );
+};
 
 const LeafLevelButton = props => {
     const editor = useSlate();
@@ -95,10 +114,7 @@ const SubToolBar2 = () => (
                 <LeafLevelButton effect="underline" />
             </Col>
             <Col md={1}>
-                {/* placeholder for color picker. */}
-                <span style={{ color: "blue", backgroundColor: "blue" }}>
-                    PL
-                </span>
+                <ColorChanger />
             </Col>
             <Col md={4}>
                 <BlockLevelButton effect="heading-one" />
