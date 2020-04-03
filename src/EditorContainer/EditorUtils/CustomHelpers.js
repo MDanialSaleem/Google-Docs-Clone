@@ -1,27 +1,49 @@
 import { Transforms, Editor } from "slate";
-const LIST_TYPES = ["numbered-list", "bulleted-list"];
+const LIST_TYPES = ["numbered-list", "bulleted-list", "list-item"];
 
 const CustomHelpers = {
     toggleBlock: (editor, format) => {
-        if(format === "heading-one" || format === "heading-two")
-        {
+
+        //the headings currently work like bold italic and underline. Meaning that you 
+        //have to actually select some text and then press the button to deactivate
+        //Howver, the list thing uses the unwrap shit, so it works differently. If you
+        //position your cursor anywhere inside a list and press the list again it will
+        //convert that into a paraggraph.
+
+        //removes custom font size if set for the heading.
+        if (format === "heading-one" || format === "heading-two") {
             Editor.removeMark(editor, "fontsize");
         }
-        const isActive = CustomHelpers.isBlockActive(editor, format);
-        const isList = LIST_TYPES.includes(format);
 
+        //if the selection has lists unwrap it. look at the paragraph above for more 
+        //explanation on this.
         Transforms.unwrapNodes(editor, {
             match: n => LIST_TYPES.includes(n.type),
             split: true
         });
 
-        Transforms.setNodes(editor, {
-            type: isActive ? "paragraph" : isList ? "list-item" : format
-        });
+        const isActive = CustomHelpers.isBlockActive(editor, format);
+        const isList = LIST_TYPES.includes(format);
 
-        if (!isActive && isList) {
-            const block = { type: format, children: [] };
-            Transforms.wrapNodes(editor, block);
+        if (isActive) {
+            Transforms.setNodes(editor, {
+                type: "paragraph"
+            });
+        }
+        else {
+            if(isList) {
+                Transforms.setNodes(editor, {
+                    type: "list-item"
+                });
+                const block = { type: format, children: [] };
+                Transforms.wrapNodes(editor, block);
+            }
+            else{
+                Transforms.setNodes(editor, {
+                    type: format
+                });
+            }
+
         }
     },
 

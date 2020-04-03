@@ -83,7 +83,7 @@ const FontSizeChanger = () => {
 const SubToolBar2 = () => (
     <>
         <Row>
-            <Col md={3}>
+            <Col md={2}>
                 <FontChanger />
             </Col>
             <Col md={2}>
@@ -100,11 +100,12 @@ const SubToolBar2 = () => (
                     PL
                 </span>
             </Col>
-            <Col md={3}>
+            <Col md={4}>
                 <BlockLevelButton effect="heading-one" />
                 <BlockLevelButton effect="heading-two" />
                 <BlockLevelButton effect="numbered-list" />
                 <BlockLevelButton effect="bulleted-list" />
+                <BlockLevelButton effect="align-right" />
             </Col>
         </Row>
     </>

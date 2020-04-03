@@ -32,7 +32,6 @@ export default {
         }
 
         if(leaf.fontsize) {
-            console.log(leaf.fontsize);
             styles = {
                 ...styles,
                 fontSize: leaf.fontsize + "px"
@@ -47,6 +46,7 @@ export default {
     },
 
     Element: ({ attributes, children, element }) => {
+        
         switch (element.type) {
             case "bulleted-list":
                 return <ul {...attributes}>{children}</ul>;
