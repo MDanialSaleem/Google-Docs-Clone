@@ -1,35 +1,38 @@
 import React, { useReducer } from "react";
 import Context from "./Context";
 import Reducer from "./Reducer";
-import Fonts from "../EditorUtils/Fonts";
 import StyleConstants from "../EditorUtils/StyleConstants";
 import Actions from "./Actions";
 
 const EditorState = (props) => {
     const initialState = {
-        [StyleConstants.FONT]: Fonts.Arial,
+        [StyleConstants.FONT]: StyleConstants.FONT_VALUES.ARIAL,
+        focused: true,
     };
 
     const [state, dispatch] = useReducer(Reducer, initialState);
 
-    const setFont = (newFont) => {
-        dispatch({
-            type: Actions.SET_FONT,
-            data: newFont,
-        });
+    const functions = {
+        setFont: (newFont) => {
+            dispatch({
+                type: Actions.SET_FONT,
+                data: newFont,
+            });
+        },
+        focus: () => dispatch({ type: Actions.FOCUS }),
+        blur: () => dispatch({ type: Actions.BLUR }),
     };
 
     return (
         <Context.Provider
             value={{
                 ...state,
-                setFont,
+                ...functions
             }}
         >
             {props.children}
         </Context.Provider>
     );
 };
-
 
 export default EditorState;

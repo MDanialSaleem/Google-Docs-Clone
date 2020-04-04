@@ -3,6 +3,7 @@ import { jsx } from "@emotion/core";
 import Toolbar from "./Toolbar";
 import DocEditor from "./DocEditor";
 import {Row, Col} from "react-grid-system";
+import EditorState from "./EditorContext/State";
 
 const Editor = () => {
     const style = {
@@ -13,8 +14,13 @@ const Editor = () => {
         <Toolbar />
         <Row css={style} justify="center">
             <Col style={{backgroundColor:"lightblue"}}  xs={10}>
-                <DocEditor />
+                <EditorState>
+                    <DocEditor />
+                </EditorState>
             </Col>
+        </Row>
+        <Row css={{backgroundColor: "purple"}}>
+            <div>Editor ends here</div>
         </Row>
     </div>
     );

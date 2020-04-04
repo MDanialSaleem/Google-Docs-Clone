@@ -89,22 +89,13 @@ const CustomHelpers = {
         return !!match;
     },
 
-    isMarkActive: (editor, format, value = null) => {
+    isMarkActive: (editor, format) => {
         const marks = Editor.marks(editor);
         switch (format) {
             case StyleConstants.TEXT_COLOR:
             case StyleConstants.FONT:
             case StyleConstants.FONT_SIZE:
-                if(!value){
-                    throw new Error(`Invalid Value passed to 
-                    isMarkActive for ${format}`);
-                }
-                if(marks && !!marks[format]){
-                    return marks[format];
-                }
-                else{
-                    return false;
-                }
+                return marks && !!marks[format] ? marks[format] : false;
             default:
                 return marks ? !!marks[format] : false;
         }

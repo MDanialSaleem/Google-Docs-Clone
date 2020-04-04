@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useContext } from "react";
 import { Editable, withReact, Slate } from "slate-react";
 import { createEditor } from "slate";
 import { withHistory } from "slate-history";
@@ -6,10 +6,14 @@ import CustomElements from "./EditorUtils/CustomElements";
 import initialValue from "./EditorUtils/InitialValue";
 import EventHandlers from "./EditorUtils/EventHandlers";
 import SubToolBar2 from "./SubToolbar2";
-import EditorState from "./EditorContext/State";
+import EditorContext from "./EditorContext/Context";
+import CustomHelpers from "./EditorUtils/CustomHelpers";
+import StyleConstants from "./EditorUtils/StyleConstants";
 
-const RichTextExample = () => {
+const DocEditor = () => {
     const [value, setValue] = useState(initialValue);
+    const editorContext = useContext(EditorContext);
+
     const renderElement = useCallback(
         (props) => <CustomElements.Element {...props} />,
         []
@@ -20,25 +24,36 @@ const RichTextExample = () => {
     );
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
+    const focusHandler = (event) => {
+        if(!editorContext.focused){
+            editorContext.focus();
+            CustomHelpers.toggleMark(editor, StyleConstants.FONT, editorContext[StyleConstants.FONT]);
+        }
+        EventHandlers.keyDown(event, editor);
+    };
+
+    const blurHandler = () => {
+        editorContext.blur();
+    };
+
     return (
         <Slate
             editor={editor}
             value={value}
             onChange={(value) => setValue(value)}
         >
-            <EditorState>
-                <SubToolBar2 />
-                <Editable
-                    renderElement={renderElement}
-                    renderLeaf={renderLeaf}
-                    placeholder="A rich text editor"
-                    spellCheck
-                    autoFocus
-                    onKeyDown={(event) => EventHandlers.keyDown(event, editor)}
-                />
-            </EditorState>
+            <SubToolBar2 />
+            <Editable
+                renderElement={renderElement}
+                renderLeaf={renderLeaf}
+                placeholder="A rich text editor"
+                spellCheck
+                autoFocus
+                onKeyDown={focusHandler}
+                onBlur={blurHandler}
+            />
         </Slate>
     );
 };
 
-export default RichTextExample;
+export default DocEditor;

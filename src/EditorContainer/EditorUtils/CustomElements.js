@@ -54,13 +54,13 @@ export default {
         };
 
         switch(element[StyleConstants.ALIGNMENT]) {
-            case StyleConstants.ALIGNMENT_TYPE.ALIGN_LEFT:
+            case StyleConstants.ALIGNMENT_VALUES.ALIGN_LEFT:
                 alignStyles.justifyContent = "left";
                 break;
-            case StyleConstants.ALIGNMENT_TYPE.ALIGN_CENTER:
+            case StyleConstants.ALIGNMENT_VALUES.ALIGN_CENTER:
                 alignStyles.justifyContent = "center";
                 break;
-            case StyleConstants.ALIGNMENT_TYPE.ALIGN_RIGHT:
+            case StyleConstants.ALIGNMENT_VALUES.ALIGN_RIGHT:
                 alignStyles.justifyContent = "right";
                 break;
             default:

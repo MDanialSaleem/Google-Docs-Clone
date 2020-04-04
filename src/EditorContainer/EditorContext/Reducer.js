@@ -8,6 +8,16 @@ export default (state, action) => {
                 ...state,
                 [StyleConstants.FONT]: action.data
             }
+        case Actions.FOCUS:
+            return {
+                ...state,
+                focused: true
+            };
+        case Actions.BLUR:
+            return {
+                ...state,
+                focused: false
+            };
         default:
     }
 }

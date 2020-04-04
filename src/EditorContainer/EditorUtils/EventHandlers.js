@@ -3,9 +3,9 @@ import isHotkey from "is-hotkey";
 import StyleConstants from "./StyleConstants";
 
 const HOTKEYS = {
-    "mod+b": StyleConstants.ALIGNMENT_TYPE.ALIGN_LEFT,
-    "mod+i": StyleConstants.ALIGNMENT_TYPE.ALIGN_CENTER,
-    "mod+u": StyleConstants.ALIGNMENT_TYPE.ALIGN_RIGHT
+    "mod+b": StyleConstants.ALIGNMENT_VALUES.ALIGN_LEFT,
+    "mod+i": StyleConstants.ALIGNMENT_VALUES.ALIGN_CENTER,
+    "mod+u": StyleConstants.ALIGNMENT_VALUES.ALIGN_RIGHT
 };
 
 export default {
