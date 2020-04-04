@@ -63,12 +63,7 @@ const CustomHelpers = {
             Editor.addMark(editor, format, true);
         }
     },
-
-    isMarkActiveWOV: (editor, format) => {
-        const marks = Editor.marks(editor);
-        return marks ? !!marks[format] : false;
-    },
-
+    
     toggleMarksWV: (editor, format, value) => {
         //deals with marks that do have a value.
         Editor.addMark(editor, format, value);
@@ -94,14 +89,24 @@ const CustomHelpers = {
         return !!match;
     },
 
-    isMarkActive: (editor, format, value) => {
+    isMarkActive: (editor, format, value = null) => {
+        const marks = Editor.marks(editor);
         switch (format) {
             case StyleConstants.TEXT_COLOR:
             case StyleConstants.FONT:
             case StyleConstants.FONT_SIZE:
-                break;
+                if(!value){
+                    throw new Error(`Invalid Value passed to 
+                    isMarkActive for ${format}`);
+                }
+                if(marks && !!marks[format]){
+                    return marks[format];
+                }
+                else{
+                    return false;
+                }
             default:
-                return CustomHelpers.isMarkActiveWOV(editor, format);
+                return marks ? !!marks[format] : false;
         }
     },
 
