@@ -8,6 +8,7 @@ const FontChanger = () => {
     const editor = useSlate();
     const [value, changeValue] = useState(Fonts.Arial);
     let active = CustomHelpers.isMarkActive(editor, StyleConstants.FONT, Fonts.Arial);
+    console.log(active);
     if(active && active !== value){
         changeValue(active);
     }
