@@ -1,6 +1,7 @@
 import Actions from "./Actions";
 import StyleConstants from "../EditorUtils/StyleConstants";
 
+
 export default (state, action) => {
     switch(action.type){
         case Actions.SET_FONT:
@@ -12,6 +13,11 @@ export default (state, action) => {
             return {
                 ...state,
                 [StyleConstants.FONT_SIZE]: action.data
+            };
+        case Actions.SET_COLOR:
+            return {
+                ...state,
+                [StyleConstants.TEXT_COLOR]:action.data
             }
         case Actions.FOCUS:
             return {
@@ -23,6 +29,11 @@ export default (state, action) => {
                 ...state,
                 focused: false
             };
+        case Actions.SET_SELECTION:
+            return {
+                ...state,
+                selection: action.data
+            }
         default:
     }
 }

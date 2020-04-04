@@ -8,7 +8,9 @@ const EditorState = (props) => {
     const initialState = {
         [StyleConstants.FONT]: StyleConstants.FONT_VALUES.ARIAL,
         [StyleConstants.FONT_SIZE]: 10,
+        [StyleConstants.TEXT_COLOR]: "#000000",
         focused: true,
+        selection: null,
     };
 
     const [state, dispatch] = useReducer(Reducer, initialState);
@@ -24,6 +26,18 @@ const EditorState = (props) => {
             dispatch({
                 type: Actions.SET_FONT_SIZE,
                 data: newSize,
+            });
+        },
+        setColor: (newColor) => {
+            dispatch({
+                type: Actions.SET_COLOR,
+                data: newColor,
+            });
+        },
+        setSelection: (newSelection) => {
+            dispatch({
+                type: Actions.SET_SELECTION,
+                data: newSelection,
             });
         },
         focus: () => dispatch({ type: Actions.FOCUS }),

@@ -24,15 +24,29 @@ const DocEditor = () => {
     );
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
-    const onmousedownhandler = (event) => {
-        if(!editorContext.focused){
+    const onmousedownhandler = () => {
+        if (!editorContext.focused) {
             editorContext.focus();
-            CustomHelpers.toggleMark(editor, StyleConstants.FONT, editorContext[StyleConstants.FONT]);
-            CustomHelpers.toggleMark(editor, StyleConstants.FONT_SIZE, editorContext[StyleConstants.FONT_SIZE]);
+            CustomHelpers.toggleMark(
+                editor,
+                StyleConstants.FONT,
+                editorContext[StyleConstants.FONT]
+            );
+            CustomHelpers.toggleMark(
+                editor,
+                StyleConstants.FONT_SIZE,
+                editorContext[StyleConstants.FONT_SIZE]
+            );
+            CustomHelpers.toggleMark(
+                editor,
+                StyleConstants.TEXT_COLOR,
+                editorContext[StyleConstants.TEXT_COLOR]
+            );
         }
     };
 
     const blurHandler = () => {
+        editorContext.setSelection(editor.selection);
         editorContext.blur();
     };
 
@@ -49,7 +63,7 @@ const DocEditor = () => {
                 placeholder="A rich text editor"
                 spellCheck
                 autoFocus
-                onKeyDown={event => EventHandlers.keyDown(event,editor)}
+                onKeyDown={(event) => EventHandlers.keyDown(event, editor)}
                 onBlur={blurHandler}
                 onClick={onmousedownhandler}
             />
