@@ -7,6 +7,11 @@ export default (state, action) => {
             return {
                 ...state,
                 [StyleConstants.FONT]: action.data
+            };
+        case Actions.SET_FONT_SIZE:
+            return {
+                ...state,
+                [StyleConstants.FONT_SIZE]: action.data
             }
         case Actions.FOCUS:
             return {

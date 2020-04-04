@@ -1,3 +1,13 @@
+const range = (start, stop, step) => {
+    return Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
+};
+
+
+// const fontsizes = range(2,50,2).reduce((res, val) => {
+//     res[val] = val;
+//     return res;
+// }, {},);
+
 export default {
     BOLD: "bold",
     ITALIC: "italic",
@@ -21,6 +31,7 @@ export default {
         IMPACT: "Impact"
     },
     FONT_SIZE: "fontsize",
+    FONT_SIZE_VALUES: range(8,50,2),
     PARAGRAPH: "paragraph",
     LIST_ITEM: "list-item",
 }

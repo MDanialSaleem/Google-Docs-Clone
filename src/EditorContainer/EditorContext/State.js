@@ -7,6 +7,7 @@ import Actions from "./Actions";
 const EditorState = (props) => {
     const initialState = {
         [StyleConstants.FONT]: StyleConstants.FONT_VALUES.ARIAL,
+        [StyleConstants.FONT_SIZE]: 10,
         focused: true,
     };
 
@@ -19,6 +20,12 @@ const EditorState = (props) => {
                 data: newFont,
             });
         },
+        setFontSize: (newSize) => {
+            dispatch({
+                type: Actions.SET_FONT_SIZE,
+                data: newSize,
+            });
+        },
         focus: () => dispatch({ type: Actions.FOCUS }),
         blur: () => dispatch({ type: Actions.BLUR }),
     };
@@ -27,7 +34,7 @@ const EditorState = (props) => {
         <Context.Provider
             value={{
                 ...state,
-                ...functions
+                ...functions,
             }}
         >
             {props.children}

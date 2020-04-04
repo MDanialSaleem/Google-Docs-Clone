@@ -5,7 +5,11 @@ const initialValue = [
     {
       type: 'paragraph',
       children: [
-        { text: 'Henlo fren. Start typing here. ', [StyleConstants.FONT]: StyleConstants.FONT_VALUES.IMPACT, fontsize: "15" },
+        { 
+          text: 'Henlo fren. Start typing here. ',
+          [StyleConstants.FONT]: StyleConstants.FONT_VALUES.IMPACT,
+          [StyleConstants.FONT_SIZE]: StyleConstants.FONT_SIZE_VALUES[6]
+        },
       ],
     }
 ];
