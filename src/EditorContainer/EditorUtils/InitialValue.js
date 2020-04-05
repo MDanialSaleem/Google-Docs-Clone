@@ -6,7 +6,7 @@ const initialValue = [
         children: [
             {
                 text: "Henlo fren. Start typing here. ",
-                [StyleConstants.FONT]: StyleConstants.FONT_VALUES.IMPACT,
+                [StyleConstants.FONT]: StyleConstants.FONT_VALUES.ARIAL,
                 [StyleConstants.FONT_SIZE]: StyleConstants.FONT_SIZE_VALUES[6],
                 [StyleConstants.TEXT_COLOR]: "#000000",
                 [StyleConstants.BACKGROUND_COLOR]: "#FFFFFF",

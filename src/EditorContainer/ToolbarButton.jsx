@@ -1,30 +1,26 @@
 import React from "react";
 import { useSlate } from "slate-react";
-import { Button } from "semantic-ui-react";
+import { Icon } from "semantic-ui-react";
 import PropTypes from "prop-types";
 
 const ToolbarButton = (props) => {
     const editor = useSlate();
     const active = props.activeFunction(editor, props.style);
 
-    let styles = {};
-
-    if (active) {
-        styles = {
-            color: "blue",
-        };
-    }
+    let styles = { cursor: "pointer" };
+    const onClickHandler = (event) => {
+        event.preventDefault();
+        props.toggleFunction(editor, props.style);
+    };
 
     return (
-        <Button
-            onMouseDown={(event) => {
-                event.preventDefault();
-                props.toggleFunction(editor, props.style);
-            }}
+        <Icon
+            onMouseDown={onClickHandler}
             style={styles}
-        >
-            {props.style[0]}
-        </Button>
+            circular
+            inverted={active}
+            name={props.icon}
+        />
     );
 };
 
@@ -32,6 +28,7 @@ ToolbarButton.propTypes = {
     style: PropTypes.string.isRequired,
     activeFunction: PropTypes.func.isRequired,
     toggleFunction: PropTypes.func.isRequired,
+    icon: PropTypes.string.isRequired,
 };
 
 export default ToolbarButton;

@@ -23,51 +23,61 @@ const SubToolBar2 = () => (
                     style={StyleConstants.BOLD}
                     activeFunction={CustomHelpers.isMarkActive}
                     toggleFunction={CustomHelpers.toggleMark}
+                    icon="bold"
                 />
                 <ToolbarButton
                     style={StyleConstants.ITALIC}
                     activeFunction={CustomHelpers.isMarkActive}
                     toggleFunction={CustomHelpers.toggleMark}
+                    icon="italic"
                 />
                 <ToolbarButton
                     style={StyleConstants.UNDERLINE}
                     activeFunction={CustomHelpers.isMarkActive}
                     toggleFunction={CustomHelpers.toggleMark}
+                    icon="underline"
                 />
                 <ToolbarButton
                     style={StyleConstants.HEADINE_ONE}
                     activeFunction={CustomHelpers.isBlockActive}
                     toggleFunction={CustomHelpers.toggleBlock}
+                    icon="heading"
                 />
                 <ToolbarButton
                     style={StyleConstants.HEADING_TWO}
                     activeFunction={CustomHelpers.isBlockActive}
                     toggleFunction={CustomHelpers.toggleBlock}
+                    icon="h"
                 />
                 <ToolbarButton
                     style={StyleConstants.NUMBERED_LIST}
                     activeFunction={CustomHelpers.isBlockActive}
                     toggleFunction={CustomHelpers.toggleBlock}
+                    icon="numbered list"
                 />
                 <ToolbarButton
                     style={StyleConstants.BULLETTED_LIST}
                     activeFunction={CustomHelpers.isBlockActive}
                     toggleFunction={CustomHelpers.toggleBlock}
+                    icon="unordered list"
                 />
                 <ToolbarButton
                     style={StyleConstants.ALIGNMENT_VALUES.ALIGN_LEFT}
                     activeFunction={CustomHelpers.isAlignmentActive}
                     toggleFunction={CustomHelpers.toggleAlignment}
+                    icon="align left"
                 />
                 <ToolbarButton
                     style={StyleConstants.ALIGNMENT_VALUES.ALIGN_CENTER}
                     activeFunction={CustomHelpers.isAlignmentActive}
                     toggleFunction={CustomHelpers.toggleAlignment}
+                    icon="align center"
                 />
                 <ToolbarButton
                     style={StyleConstants.ALIGNMENT_VALUES.ALIGN_RIGHT}
                     activeFunction={CustomHelpers.isAlignmentActive}
                     toggleFunction={CustomHelpers.toggleAlignment}
+                    icon="align right"
                 />
             </Col>
         </Row>
