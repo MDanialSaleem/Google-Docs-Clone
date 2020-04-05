@@ -13,7 +13,7 @@ export default {
             children = <em>{children}</em>;
         }
 
-        if (leaf[StyleConstants.ITALIC]) {
+        if (leaf[StyleConstants.UNDERLINE]) {
             children = <u>{children}</u>;
         }
 
