@@ -42,6 +42,11 @@ const DocEditor = () => {
                 StyleConstants.TEXT_COLOR,
                 editorContext[StyleConstants.TEXT_COLOR]
             );
+            CustomHelpers.toggleMark(
+                editor,
+                StyleConstants.BACKGROUND_COLOR,
+                editorContext[StyleConstants.BACKGROUND_COLOR]
+            );
         }
     };
 

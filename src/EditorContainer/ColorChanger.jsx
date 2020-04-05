@@ -2,23 +2,25 @@ import React from "react";
 import { useSlate } from "slate-react";
 import CustomHelpers from "./EditorUtils/CustomHelpers";
 import { Popup, Button } from "semantic-ui-react";
-import { CirclePicker } from "react-color";
+import { SwatchesPicker } from "react-color";
 import StyleConstants from "./EditorUtils/StyleConstants";
 import EditorContext from "./EditorContext/Context";
 import { Transforms, Text } from "slate";
+import PropTypes from "prop-types";
 
-const ColorChanger = () => {
+const ColorChanger = (props) => {
     const editor = useSlate();
     const editorContext = React.useContext(EditorContext);
+    const type = props.foreground
+        ? StyleConstants.TEXT_COLOR
+        : StyleConstants.BACKGROUND_COLOR;
 
-    let active = CustomHelpers.isBlockActive(editor, StyleConstants.TEXT_COLOR);
+    let active = CustomHelpers.isBlockActive(editor, type);
 
-    if (
-        editorContext.focused &&
-        active &&
-        active !== editorContext[StyleConstants.TEXT_COLOR]
-    ) {
-        editorContext.setColor(active);
+    if (editorContext.focused && active && active !== editorContext[type]) {
+        props.foreground
+            ? editorContext.setColor(active)
+            : editorContext.setBackgroundColor(active);
     }
 
     const onClickHandler = (color, event) => {
@@ -26,25 +28,25 @@ const ColorChanger = () => {
         if (!editorContext.selection) {
             return;
         }
-        editorContext.setColor(color.hex);
+        props.foreground
+            ? editorContext.setColor(color.hex)
+            : editorContext.setBackgroundColor(color.hex);
+
         if (
             editorContext.selection.anchor.offset ===
             editorContext.selection.focus.offset
         ) {
-            CustomHelpers.toggleMark(
-                editor,
-                StyleConstants.TEXT_COLOR,
-                color.hex
-            );
+            CustomHelpers.toggleMark(editor, type, color.hex);
         } else {
-            console.log(editorContext.selection);
             Transforms.setNodes(
                 editor,
-                { [StyleConstants.TEXT_COLOR]: color.hex },
+                {
+                    [type]: color.hex,
+                },
                 {
                     at: editorContext.selection,
                     match: (node) => Text.isText(node),
-                    split: true
+                    split: true,
                 }
             );
         }
@@ -52,12 +54,18 @@ const ColorChanger = () => {
 
     return (
         <Popup trigger={<Button>C</Button>} position="bottom center" hoverable>
-            <Popup.Header>Pick Text Color</Popup.Header>
+            <Popup.Header>
+                {props.foreground ? "Pick Text Color" : "Pick Background Color"}
+            </Popup.Header>
             <Popup.Content>
-                <CirclePicker onChangeComplete={onClickHandler} />
+                <SwatchesPicker onChangeComplete={onClickHandler} />
             </Popup.Content>
         </Popup>
     );
+};
+
+ColorChanger.propTypes = {
+    foreground: PropTypes.bool.isRequired,
 };
 
 export default ColorChanger;

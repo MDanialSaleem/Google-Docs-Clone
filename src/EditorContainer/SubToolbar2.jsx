@@ -7,7 +7,6 @@ import ColorChanger from "./ColorChanger";
 import FontChanger from "./FontChanger";
 import FontSizeChanger from "./FontSizeChanger";
 
-
 const SubToolBar2 = () => (
     <>
         <Row>
@@ -23,7 +22,10 @@ const SubToolBar2 = () => (
                 <LeafLevelButton effect={StyleConstants.UNDERLINE} />
             </Col>
             <Col md={1}>
-                <ColorChanger />
+                <ColorChanger foreground={true} />
+            </Col>
+            <Col md={1}>
+                <ColorChanger foreground={false} />
             </Col>
             <Col md={4}>
                 <BlockLevelButton effect={StyleConstants.HEADINE_ONE} />

@@ -9,6 +9,7 @@ const EditorState = (props) => {
         [StyleConstants.FONT]: StyleConstants.FONT_VALUES.ARIAL,
         [StyleConstants.FONT_SIZE]: 10,
         [StyleConstants.TEXT_COLOR]: "#000000",
+        [StyleConstants.BACKGROUND_COLOR]: "#FFFFFF",
         focused: true,
         selection: null,
     };
@@ -38,6 +39,12 @@ const EditorState = (props) => {
             dispatch({
                 type: Actions.SET_SELECTION,
                 data: newSelection,
+            });
+        },
+        setBackgroundColor: (newColor) => {
+            dispatch({
+                type: Actions.SET_BG_COLOR,
+                data: newColor,
             });
         },
         focus: () => dispatch({ type: Actions.FOCUS }),
