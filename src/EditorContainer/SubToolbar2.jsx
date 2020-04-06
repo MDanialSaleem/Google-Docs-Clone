@@ -9,7 +9,7 @@ import CustomHelpers from "./EditorUtils/CustomHelpers";
 
 const SubToolBar2 = () => (
     <>
-        <Row justify="start">
+        <Row justify="start" align="center">
             <Col sm={4} lg={2}>
                 <FontChanger />
             </Col>

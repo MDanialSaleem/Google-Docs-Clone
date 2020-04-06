@@ -53,11 +53,16 @@ export default {
     },
 
     Element: ({ attributes, children, element }) => {
-        let alignStyles = {
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-        };
+        console.log(element);
+
+        let alignStyles = {};
+        if (!!element[StyleConstants.ALIGNMENT]) {
+            alignStyles = {
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+            };
+        }
 
         switch (element[StyleConstants.ALIGNMENT]) {
             case StyleConstants.ALIGNMENT_VALUES.ALIGN_LEFT:

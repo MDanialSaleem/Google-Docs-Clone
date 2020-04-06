@@ -7,7 +7,7 @@ const ToolbarButton = (props) => {
     const editor = useSlate();
     const active = props.activeFunction(editor, props.style);
 
-    let styles = { cursor: "pointer" };
+    let styles = { cursor: "pointer", margin: "5px 0px" };
     const onClickHandler = (event) => {
         event.preventDefault();
         props.toggleFunction(editor, props.style);

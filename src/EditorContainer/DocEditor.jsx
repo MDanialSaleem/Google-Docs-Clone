@@ -71,6 +71,7 @@ const DocEditor = () => {
                 onKeyDown={(event) => EventHandlers.keyDown(event, editor)}
                 onBlur={blurHandler}
                 onClick={onmousedownhandler}
+                style={{ minHeight: "500px", backgroundColor: "white" }}
             />
         </Slate>
     );

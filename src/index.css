@@ -1,3 +1,4 @@
 body {
     background-color: #ede7f6;
+    min-width: 0px !important;
 }
