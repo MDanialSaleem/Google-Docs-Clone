@@ -17,8 +17,7 @@ const SubToolBar2 = () => (
                 <FontSizeChanger />
             </Col>
             <Col sm={12} lg={8}>
-                <ColorChanger foreground={true} />
-                <ColorChanger foreground={false} />
+                <ColorChanger />
                 <ToolbarButton
                     style={StyleConstants.BOLD}
                     activeFunction={CustomHelpers.isMarkActive}
