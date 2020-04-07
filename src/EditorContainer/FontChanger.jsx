@@ -40,5 +40,4 @@ const FontChanger = () => {
     );
 };
 
-
 export default FontChanger;

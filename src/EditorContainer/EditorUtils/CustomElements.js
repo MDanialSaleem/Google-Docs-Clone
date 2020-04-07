@@ -13,28 +13,35 @@ export default {
             children = <em>{children}</em>;
         }
 
-        if (leaf[StyleConstants.ITALIC]) {
+        if (leaf[StyleConstants.UNDERLINE]) {
             children = <u>{children}</u>;
         }
 
         if (leaf[StyleConstants.FONT]) {
             styles = {
                 ...styles,
-                fontFamily: leaf[StyleConstants.FONT]
+                fontFamily: leaf[StyleConstants.FONT],
             };
         }
 
         if (leaf[StyleConstants.TEXT_COLOR]) {
             styles = {
                 ...styles,
-                color: leaf[StyleConstants.TEXT_COLOR]
+                color: leaf[StyleConstants.TEXT_COLOR],
             };
         }
 
-        if(leaf[StyleConstants.FONT_SIZE]) {
+        if (leaf[StyleConstants.BACKGROUND_COLOR]) {
             styles = {
                 ...styles,
-                fontSize: leaf[StyleConstants.FONT_SIZE] + "px"
+                backgroundColor: leaf[StyleConstants.BACKGROUND_COLOR],
+            };
+        }
+
+        if (leaf[StyleConstants.FONT_SIZE]) {
+            styles = {
+                ...styles,
+                fontSize: leaf[StyleConstants.FONT_SIZE] + "px",
             };
         }
 
@@ -46,14 +53,18 @@ export default {
     },
 
     Element: ({ attributes, children, element }) => {
+        console.log(element);
 
-        let alignStyles = {
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-        };
+        let alignStyles = {};
+        if (!!element[StyleConstants.ALIGNMENT]) {
+            alignStyles = {
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+            };
+        }
 
-        switch(element[StyleConstants.ALIGNMENT]) {
+        switch (element[StyleConstants.ALIGNMENT]) {
             case StyleConstants.ALIGNMENT_VALUES.ALIGN_LEFT:
                 alignStyles.justifyContent = "left";
                 break;
@@ -64,25 +75,44 @@ export default {
                 alignStyles.justifyContent = "right";
                 break;
             default:
-
         }
 
         switch (element.type) {
             case StyleConstants.BULLETTED_LIST:
-                return <ul style={alignStyles}  {...attributes}>{children}</ul>;
+                return (
+                    <ul style={alignStyles} {...attributes}>
+                        {children}
+                    </ul>
+                );
             case StyleConstants.HEADINE_ONE:
-                return <h1 style={alignStyles}  {...attributes}>{children}</h1>;
+                return (
+                    <h1 style={alignStyles} {...attributes}>
+                        {children}
+                    </h1>
+                );
             case StyleConstants.HEADING_TWO:
-                return <h2 style={alignStyles}  {...attributes}>{children}</h2>;
+                return (
+                    <h2 style={alignStyles} {...attributes}>
+                        {children}
+                    </h2>
+                );
             case StyleConstants.LIST_ITEM:
-                return <li  {...attributes}>{children}</li>;
+                return <li {...attributes}>{children}</li>;
             case StyleConstants.NUMBERED_LIST:
-                return <ol style={alignStyles}  {...attributes}>{children}</ol>;
+                return (
+                    <ol style={alignStyles} {...attributes}>
+                        {children}
+                    </ol>
+                );
             default:
-                return <p  style={alignStyles} {...attributes}>{children}</p>;
+                return (
+                    <p style={alignStyles} {...attributes}>
+                        {children}
+                    </p>
+                );
         }
     },
-    DefaultElement: props => {
+    DefaultElement: (props) => {
         return <p {...props.attributes}>{props.children}</p>;
-    }
+    },
 };

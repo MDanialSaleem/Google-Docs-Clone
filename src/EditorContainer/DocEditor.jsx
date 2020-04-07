@@ -42,6 +42,11 @@ const DocEditor = () => {
                 StyleConstants.TEXT_COLOR,
                 editorContext[StyleConstants.TEXT_COLOR]
             );
+            CustomHelpers.toggleMark(
+                editor,
+                StyleConstants.BACKGROUND_COLOR,
+                editorContext[StyleConstants.BACKGROUND_COLOR]
+            );
         }
     };
 
@@ -66,6 +71,7 @@ const DocEditor = () => {
                 onKeyDown={(event) => EventHandlers.keyDown(event, editor)}
                 onBlur={blurHandler}
                 onClick={onmousedownhandler}
+                style={{ minHeight: "500px", backgroundColor: "white" }}
             />
         </Slate>
     );

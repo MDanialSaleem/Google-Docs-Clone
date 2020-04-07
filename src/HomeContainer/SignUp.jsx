@@ -116,11 +116,6 @@ class SignUp extends React.Component {
 	}
 }
 
-// const SignUp = props =>
-// <>
-
-// </>
-
 SignUp.propTypes = {
 	hasAccountHandler: PropTypes.func.isRequired
 };

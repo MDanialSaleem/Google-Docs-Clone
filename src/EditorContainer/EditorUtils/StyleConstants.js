@@ -23,6 +23,7 @@ export default {
         ALIGN_CENTER: "align-center",
     },
     TEXT_COLOR: "color",
+    BACKGROUND_COLOR: "background-color",
     FONT: "font",
     FONT_VALUES: {
         ARIAL : 'Arial',

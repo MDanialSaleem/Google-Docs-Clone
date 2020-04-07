@@ -74,6 +74,7 @@ const CustomHelpers = {
             case StyleConstants.TEXT_COLOR:
             case StyleConstants.FONT:
             case StyleConstants.FONT_SIZE:
+            case StyleConstants.BACKGROUND_COLOR:
                 CustomHelpers.toggleMarksWV(editor, format, value);
                 break;
             default:
@@ -95,6 +96,7 @@ const CustomHelpers = {
             case StyleConstants.TEXT_COLOR:
             case StyleConstants.FONT:
             case StyleConstants.FONT_SIZE:
+            case StyleConstants.BACKGROUND_COLOR:
                 return marks && !!marks[format] ? marks[format] : false;
             default:
                 return marks ? !!marks[format] : false;

@@ -1,62 +1,113 @@
 import React from "react";
 import { useSlate } from "slate-react";
 import CustomHelpers from "./EditorUtils/CustomHelpers";
-import { Popup, Button } from "semantic-ui-react";
-import { CirclePicker } from "react-color";
+import { Modal, Button, Icon, Message } from "semantic-ui-react";
+import { SwatchesPicker, GithubPicker } from "react-color";
 import StyleConstants from "./EditorUtils/StyleConstants";
 import EditorContext from "./EditorContext/Context";
 import { Transforms, Text } from "slate";
+import PropTypes from "prop-types";
+import { Row, Col, Visible, Hidden } from "react-grid-system";
 
-const ColorChanger = () => {
+const CC = (props) => {
     const editor = useSlate();
     const editorContext = React.useContext(EditorContext);
+    const type = props.foreground
+        ? StyleConstants.TEXT_COLOR
+        : StyleConstants.BACKGROUND_COLOR;
 
-    let active = CustomHelpers.isBlockActive(editor, StyleConstants.TEXT_COLOR);
+    let active = CustomHelpers.isMarkActive(editor, type);
 
-    if (
-        editorContext.focused &&
-        active &&
-        active !== editorContext[StyleConstants.TEXT_COLOR]
-    ) {
-        editorContext.setColor(active);
+    if (editorContext.focused && active && active !== editorContext[type]) {
+        props.foreground
+            ? editorContext.setColor(active)
+            : editorContext.setBackgroundColor(active);
     }
 
     const onClickHandler = (color, event) => {
-        event.preventDefault();
         if (!editorContext.selection) {
             return;
         }
-        editorContext.setColor(color.hex);
+
+        props.foreground
+            ? editorContext.setColor(color.hex)
+            : editorContext.setBackgroundColor(color.hex);
+
         if (
             editorContext.selection.anchor.offset ===
             editorContext.selection.focus.offset
         ) {
-            CustomHelpers.toggleMark(
-                editor,
-                StyleConstants.TEXT_COLOR,
-                color.hex
-            );
+            CustomHelpers.toggleMark(editor, type, color.hex);
         } else {
-            console.log(editorContext.selection);
             Transforms.setNodes(
                 editor,
-                { [StyleConstants.TEXT_COLOR]: color.hex },
+                {
+                    [type]: color.hex,
+                },
                 {
                     at: editorContext.selection,
                     match: (node) => Text.isText(node),
-                    split: true
+                    split: true,
                 }
             );
         }
     };
+    const margins = {
+        marginBottom: "20px",
+    };
 
     return (
-        <Popup trigger={<Button>C</Button>} position="bottom center" hoverable>
-            <Popup.Header>Pick Text Color</Popup.Header>
-            <Popup.Content>
-                <CirclePicker onChangeComplete={onClickHandler} />
-            </Popup.Content>
-        </Popup>
+        <>
+            <Col style={margins}>
+                <h4>
+                    {props.foreground
+                        ? "Pick Text Color"
+                        : "Pick Background Color"}
+                </h4>
+                <Hidden xs>
+                    <SwatchesPicker onChange={onClickHandler} />
+                </Hidden>
+                <Visible xs>
+                    <GithubPicker onChange={onClickHandler} />
+                </Visible>
+            </Col>
+        </>
+    );
+};
+
+CC.propTypes = {
+    foreground: PropTypes.bool.isRequired,
+};
+
+const ColorChanger = () => {
+    const editor = useSlate();
+    const text = CustomHelpers.isMarkActive(editor, StyleConstants.TEXT_COLOR);
+    const background = CustomHelpers.isMarkActive(
+        editor,
+        StyleConstants.BACKGROUND_COLOR
+    );
+    const iconStyles = {
+        color: text,
+        backgroundColor: background,
+    };
+
+    return (
+        <Modal
+            dimmer="blurring"
+            trigger={
+                <Icon link circular style={iconStyles} name="paint brush" />
+            }
+            closeIcon
+            position="bottom center"
+            hoverable
+        >
+            <Modal.Content>
+                <Row justify="around">
+                    <CC foreground={true} />
+                    <CC foreground={false} />
+                </Row>
+            </Modal.Content>
+        </Modal>
     );
 };
 
