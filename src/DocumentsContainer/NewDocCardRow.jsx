@@ -7,11 +7,13 @@ import LetterImg from "../Assets/Images/Templates/Letter.png";
 import ProjectProposalImg from "../Assets/Images/Templates/ProjectProposal.png";
 import BrochureImg from "../Assets/Images/Templates/Brochure.png";
 import RecipeImg from "../Assets/Images/Templates/Recipe.png";
+import { Button } from "semantic-ui-react";
 
 const styles = {
     background : "lightgrey",
     padding: "20px 0px"
 };
+
 
 const NewDocCardRow = () => 
 <div style={styles}>
@@ -47,10 +49,8 @@ const NewDocCardRow = () =>
     </Hidden>
 
     <Visible sm xs>
-        <Row justify="center">
-            <Col xs="content">
-                <NewDocCard title="Blank" imageUrl={BlankImg}/>
-            </Col>
+        <Row style={{paddingBottom: "5px"}} justify="center">
+            <Button color="black">Create a New Document</Button>
         </Row>
     </Visible>
 </div>

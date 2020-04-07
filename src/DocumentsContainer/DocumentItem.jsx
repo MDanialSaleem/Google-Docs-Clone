@@ -1,10 +1,20 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import PropTypes from "prop-types";
-import {Row, Col} from "react-grid-system";
-import {Icon} from "semantic-ui-react";
-import {useHistory} from "react-router-dom";
+import { Row, Col } from "react-grid-system";
+import { Icon, Dropdown } from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
 import { Editor } from "../Utils/RoutingConstants";
+
+const DropdownSettings = () => (
+    <Dropdown icon="ellipsis vertical">
+        <Dropdown.Menu>
+            <Dropdown.Header content="settings"/>
+            <Dropdown.Item text="Delete"/>
+            <Dropdown.Item text="Rename"/>
+        </Dropdown.Menu>
+    </Dropdown>
+)
 
 const DocumentItem = props => {
     const styles = {
@@ -36,7 +46,7 @@ const DocumentItem = props => {
                 </Col>
                 <Col sm={2}>{props.owner}</Col>
                 <Col sm={2}>{props.timeAccessed}</Col>
-                <Col sm={2}><Icon name="ellipsis vertical" /></Col>
+                <Col sm={2}><DropdownSettings></DropdownSettings></Col>
             </Row>
         </div>
     );

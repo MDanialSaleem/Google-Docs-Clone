@@ -13,7 +13,7 @@ const Toolbar = () => (
                 <Icon name="file text outline" />
             </Col>
             <Col>
-                <h4>Name</h4>
+                <h2>Name</h2>
             </Col>
         </Row>
         <SubToolbar1 />
