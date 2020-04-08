@@ -1,6 +1,5 @@
 import React from "react";
 import DocumentItem from "./DocumentItem";
-import NewDocCard from "./NewDocCard";
 import SmallerScreenDocItem from "./SmallerScreenDocItem";
 import { Row, Col, Hidden, Visible } from "react-grid-system";
 import Image from "../Assets/Images/Templates/Doc.png"
