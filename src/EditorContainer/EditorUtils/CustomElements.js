@@ -53,26 +53,16 @@ export default {
     },
 
     Element: ({ attributes, children, element }) => {
-        console.log(element);
-
         let alignStyles = {};
-        if (!!element[StyleConstants.ALIGNMENT]) {
-            alignStyles = {
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-            };
-        }
-
         switch (element[StyleConstants.ALIGNMENT]) {
             case StyleConstants.ALIGNMENT_VALUES.ALIGN_LEFT:
-                alignStyles.justifyContent = "left";
+                alignStyles.textAlign = "left";
                 break;
             case StyleConstants.ALIGNMENT_VALUES.ALIGN_CENTER:
-                alignStyles.justifyContent = "center";
+                alignStyles.textAlign = "center";
                 break;
             case StyleConstants.ALIGNMENT_VALUES.ALIGN_RIGHT:
-                alignStyles.justifyContent = "right";
+                alignStyles.textAlign = "right";
                 break;
             default:
         }

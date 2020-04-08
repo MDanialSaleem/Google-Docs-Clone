@@ -12,6 +12,7 @@ const initialValue = [
                 [StyleConstants.BACKGROUND_COLOR]: "#FFFFFF",
             },
         ],
+        [StyleConstants.ALIGNMENT]: StyleConstants.ALIGNMENT_VALUES.ALIGN_LEFT,
     },
 ];
 
