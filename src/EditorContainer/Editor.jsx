@@ -1,71 +1,43 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import { useState, useMemo } from "react";
 import Toolbar from "./Toolbar";
 import DocEditor from "./DocEditor";
-import { Row, Col, Hidden } from "react-grid-system";
+import { Row, Col } from "react-grid-system";
+import EditorFooter from "./EditorFooter";
 import EditorState from "./EditorContext/State";
-import { Item, Icon, Button, Popup } from "semantic-ui-react";
-import AvatarImg from "../Assets/Images/userimage.png";
+import initialValue from "./EditorUtils/InitialValue";
+import { createEditor } from "slate";
+import { withHistory } from "slate-history";
+import { Slate, withReact } from "slate-react";
+import SubToolBar2 from "./SubToolbar2";
 
 const Editor = () => {
     const style = {
         marginTop: "50px",
     };
 
-    const footerStyles = {
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        zIndex: 1,
-        backgroundColor: "pink",
-        width: "100%",
-    };
+    const [value, setValue] = useState(initialValue);
+    const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
     return (
         <div>
-            <Toolbar />
-            <Row css={style} justify="center">
-                <Col xs={10}>
-                    <EditorState>
-                        <DocEditor />
-                    </EditorState>
-                </Col>
-            </Row>
-            <Row style={footerStyles} align="center" justify="between">
-                <Col sm={4}>
-                    <h4>Action: User 1 editing</h4>
-                </Col>
-                <Col style={{ justifyContent: "end" }} sm={4}>
-                    <Popup trigger={<Button>Active Users</Button>}>
-                        <Popup.Content>
-                            <Item.Group>
-                                <Item>
-                                    <Hidden xs>
-                                        <Item.Image
-                                            size="mini"
-                                            src={AvatarImg}
-                                        />
-                                    </Hidden>
-                                    <Item.Content verticalAlign="middle">
-                                        <Item.Header>User 1</Item.Header>
-                                    </Item.Content>
-                                </Item>
-                                <Item>
-                                    <Hidden xs>
-                                        <Item.Image
-                                            size="mini"
-                                            src={AvatarImg}
-                                        />
-                                    </Hidden>
-                                    <Item.Content verticalAlign="middle">
-                                        <Item.Header>User 1</Item.Header>
-                                    </Item.Content>
-                                </Item>
-                            </Item.Group>
-                        </Popup.Content>
-                    </Popup>
-                </Col>
-            </Row>
+            <EditorState>
+                <Slate
+                    editor={editor}
+                    value={value}
+                    onChange={(value) => setValue(value)}
+                >
+                    <Toolbar />
+                    <Row css={style} justify="center">
+                        <Col xs={10}>
+                            <SubToolBar2 />
+                            <DocEditor />
+                        </Col>
+                    </Row>
+                    <EditorFooter />
+                </Slate>
+            </EditorState>
         </div>
     );
 };

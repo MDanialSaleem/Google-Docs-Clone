@@ -1,9 +1,6 @@
-import React, { useCallback, useMemo, useState, useContext } from "react";
-import { Editable, withReact, Slate } from "slate-react";
-import { createEditor } from "slate";
-import { withHistory } from "slate-history";
+import React, { useCallback, useContext } from "react";
+import { Editable, useSlate } from "slate-react";
 import CustomElements from "./EditorUtils/CustomElements";
-import initialValue from "./EditorUtils/InitialValue";
 import EventHandlers from "./EditorUtils/EventHandlers";
 import SubToolBar2 from "./SubToolbar2";
 import EditorContext from "./EditorContext/Context";
@@ -11,8 +8,8 @@ import CustomHelpers from "./EditorUtils/CustomHelpers";
 import StyleConstants from "./EditorUtils/StyleConstants";
 
 const DocEditor = () => {
-    const [value, setValue] = useState(initialValue);
     const editorContext = useContext(EditorContext);
+    const editor = useSlate();
 
     const renderElement = useCallback(
         (props) => <CustomElements.Element {...props} />,
@@ -22,7 +19,6 @@ const DocEditor = () => {
         (props) => <CustomElements.Leaf {...props} />,
         []
     );
-    const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
     const onmousedownhandler = () => {
         if (!editorContext.focused) {
@@ -56,24 +52,17 @@ const DocEditor = () => {
     };
 
     return (
-        <Slate
-            editor={editor}
-            value={value}
-            onChange={(value) => setValue(value)}
-        >
-            <SubToolBar2 />
-            <Editable
-                renderElement={renderElement}
-                renderLeaf={renderLeaf}
-                placeholder="A rich text editor"
-                spellCheck
-                autoFocus
-                onKeyDown={(event) => EventHandlers.keyDown(event, editor)}
-                onBlur={blurHandler}
-                onClick={onmousedownhandler}
-                style={{ minHeight: "500px", backgroundColor: "white" }}
-            />
-        </Slate>
+        <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            placeholder="A rich text editor"
+            spellCheck
+            autoFocus
+            onKeyDown={(event) => EventHandlers.keyDown(event, editor)}
+            onBlur={blurHandler}
+            onClick={onmousedownhandler}
+            style={{ minHeight: "500px", backgroundColor: "white" }}
+        />
     );
 };
 
