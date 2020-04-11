@@ -1,7 +1,10 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
+const connectDB = require("./connectDB");
+
+
+connectDB();
 
 app.use(express.static(path.join(__dirname, "/../client/build/")));
 

@@ -5,3 +5,6 @@
 # production
 /client/build
 
+#privacy.
+*.private.*
+
