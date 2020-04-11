@@ -2,6 +2,7 @@
   "name": "kaghaz",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/types": "^0.7.0",
