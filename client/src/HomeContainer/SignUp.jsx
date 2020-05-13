@@ -4,6 +4,7 @@ import { Container, Row, Col, Hidden } from "react-grid-system";
 import { Button, Segment } from "semantic-ui-react";
 import Image from "../Assets/Images/Templates/Form.jpg";
 import SignUpForm from "./SignUpForm";
+import Socials from "./Socials";
 
 const colStyle = {
     display: "flex",
@@ -20,32 +21,6 @@ const signUpStyle = {
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
 };
-
-const Socials = () => (
-    <Segment basic class="social-container">
-        <Button
-            circular
-            color="facebook"
-            href="#"
-            class="social"
-            icon="facebook"
-        />
-        <Button
-            circular
-            color="google plus"
-            href="#"
-            class="social"
-            icon="google plus"
-        />
-        <Button
-            circular
-            color="linkedin"
-            href="#"
-            class="social"
-            icon="linkedin"
-        />
-    </Segment>
-);
 
 const SignUp = (props) => {
     return (
