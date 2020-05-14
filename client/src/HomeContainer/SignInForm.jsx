@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { Button, Form, Message } from "semantic-ui-react";
+import { Button, Form, Message, Portal } from "semantic-ui-react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { connect } from "react-redux";
+import { loadUser } from "../Store/Actions/Auth";
+import PropTypes from "prop-types";
 
-export default () => {
+const SignInForm = (props) => {
     const { register, handleSubmit } = useForm();
 
     const [serverErr, setServerErr] = useState([]);
     const onSubmit = (data) => {
-        const register = async (email, password) => {
+        const login = async (email, password) => {
             const config = {
                 headers: {
                     "Content-Type": "application/json",
@@ -19,13 +22,16 @@ export default () => {
 
             try {
                 const res = await axios.post("/api/users/login", body, config);
-                console.log(res);
+                localStorage.token = res.data.token;
+                props.loadUser();
             } catch (err) {
+                delete localStorage['token'];
+                props.loadUser();
                 setServerErr(err.response.data.errors);
             }
         };
         const { email, password } = data;
-        register(email, password);
+        login(email, password);
     };
     return (
         <Form
@@ -64,3 +70,9 @@ export default () => {
         </Form>
     );
 };
+
+SignInForm.propTypes = {
+    loadUser: PropTypes.func.isRequired,
+};
+
+export default connect(null, { loadUser })(SignInForm);

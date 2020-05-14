@@ -7,9 +7,10 @@ const authMiddleware = require("../middleware/auth");
 const keys = require("../constants.private");
 const router = express.Router();
 
+// /api/users
 router.get("/", authMiddleware, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user.id).select("-password");
         return res.status(200).json(user);
     } catch (error) {
         console.log(error.message);

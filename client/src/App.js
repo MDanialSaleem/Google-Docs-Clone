@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 //for redux
 import { Provider } from "react-redux"; //connects react with redux.
 import store from "./Store/store";
@@ -7,6 +7,9 @@ import store from "./Store/store";
 import { BrowserRouter, Switch, Link, Route } from "react-router-dom";
 import * as Paths from "./Utils/RoutingConstants";
 //end routing.
+//for auth
+import { loadUser } from "./Store/Actions/Auth";
+//end auth
 import Home from "./HomeContainer/Home";
 import Documents from "./DocumentsContainer/Documents";
 import Editor from "./EditorContainer/Editor";
@@ -19,6 +22,9 @@ const style = {
 };
 
 function App() {
+    useEffect(() => {
+        store.dispatch(loadUser());
+    }, []);
     return (
         <Provider store={store}>
             <BrowserRouter>

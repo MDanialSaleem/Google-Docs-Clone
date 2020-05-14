@@ -5,8 +5,6 @@ import { Button, Input, Segment, Form, Modal } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import { Documents } from "../Utils/RoutingConstants";
 import Image from "../Assets/Images/Templates/Form.jpg";
-import { connect } from "react-redux";
-import { login } from "../Store/Actions/Auth";
 import Socials from "./Socials";
 import SignInForm from "./SignInForm";
 
@@ -117,7 +115,6 @@ const SignIn = (props) => {
 SignIn.propTypes = {
     noAccountHandler: PropTypes.func.isRequired,
     forgotPasswordHandler: PropTypes.func.isRequired,
-    login: PropTypes.func.isRequired,
 };
 
-export default connect(null, { login })(SignIn);
+export default SignIn;
