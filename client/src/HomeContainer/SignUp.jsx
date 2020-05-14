@@ -55,7 +55,7 @@ const SignUp = (props) => {
                         <Button
                             basic
                             color="black"
-                            id="fonts"
+                             
                             style={{ marginBottom: 10 }}
                             onClick={props.hasAccountHandler}
                         >
@@ -66,16 +66,16 @@ const SignUp = (props) => {
                 <Hidden xs>
                     <Col xs={3} sm={4} md={3} style={signUpStyle}>
                         <Segment basic style={colStyle}>
-                            <h1 id="fonts" style={{ paddingTop: 70 }}>
+                            <h1   style={{ paddingTop: 70 }}>
                                 Welcome Back!
                             </h1>
-                            <p id="fonts">
+                            <p  >
                                 To keep connected with us please login with your
                                 personal info
                             </p>
                             <Button
                                 color="black"
-                                id="fonts"
+                                 
                                 style={{ marginTop: 10 }}
                                 onClick={props.hasAccountHandler}
                             >

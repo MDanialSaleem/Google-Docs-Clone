@@ -1,8 +1,13 @@
 import React from "react";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router";
+import { Documents } from "../Utils/RoutingConstants";
 
 export default () => {
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
     const SIGNIN = "signin";
     const SIGNUP = "signup";
     const [screen, setScreen] = React.useState(SIGNIN);
@@ -28,5 +33,5 @@ export default () => {
         default:
             throw new Error("Undefined screen in signinup");
     }
-    return <>{screenToShow}</>;
+    return isAuthenticated ? <Redirect to={Documents} /> : <>{screenToShow}</>;
 };
