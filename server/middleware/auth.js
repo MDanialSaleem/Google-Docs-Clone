@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken");
 const keys = require("../constants.private");
 
+
+// This middleware extracts the jwt token from the request if it has a valid one, and sets the user field
+// to an object that contains the user id, otherwise it denies the request.
 module.exports = (req, res, next) => {
     const token = req.header("x-auth-token");
 

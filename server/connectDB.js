@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const constants = require("./constants");
 
+// Establishes connection with mongodb.
+
 const connectDB = async () => {
     try {
         await mongoose.connect(constants.mongoURI, {

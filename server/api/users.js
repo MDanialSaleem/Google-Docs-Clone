@@ -7,7 +7,12 @@ const authMiddleware = require("../middleware/auth");
 const keys = require("../constants.private");
 const router = express.Router();
 
-// /api/users
+//This file describes routes for handling users. It currently deals with three routes
+// 1. Registering users.
+// 2. Logging In users.
+// 3. Getting user profile.
+
+//GET /api/users
 router.get("/", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password");
@@ -18,6 +23,7 @@ router.get("/", authMiddleware, async (req, res) => {
     }
 });
 
+//POST /api/users/login
 router.post(
     "/login",
     [
@@ -82,6 +88,7 @@ router.post(
     }
 );
 
+//POST /api/users
 router.post(
     "/",
     [

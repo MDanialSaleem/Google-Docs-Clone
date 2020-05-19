@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+
+//This file describes the user model to be used by mongoose for working with mongodb.
+
 const userSchema = mongoose.Schema({
     name: {
         type: String,
