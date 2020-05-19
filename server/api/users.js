@@ -15,7 +15,12 @@ const router = express.Router();
 //GET /api/users
 router.get("/", authMiddleware, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select("-password");
+        const user = await User.findById(req.user.id)
+            .select("-password")
+            .populate({
+                path: "owndocs",
+                select: "-content",
+            });
         return res.status(200).json(user);
     } catch (error) {
         console.log(error.message);

@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const InitialValue = require("./Constants/InitialValue");
-// This file describes the document model.
 
-const documentSchema = mongoose.Schema({
+// This file describes the document model. kind of like how we use schemas to describe tables in sql.
+
+const documentSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
