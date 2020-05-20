@@ -8,6 +8,7 @@ const router = express.Router();
 // This file describes routes for handling documents. It includes
 // 1. Creating users.
 
+// POST /api/documents/. used to create a new document.
 router.post(
     "/",
     authMiddleware,
@@ -35,7 +36,7 @@ router.post(
                 owner: req.user.id,
             });
 
-            await document.save()
+            await document.save();
 
             return res.status(200).send("Doument created");
         } catch (err) {
@@ -44,5 +45,30 @@ router.post(
         }
     }
 );
+
+// DELETE /api/documents/:id. Used to delete a post by id.
+router.delete("/:id", authMiddleware, async (req, res) => {
+    try {
+        let document = await Document.findById(req.params.id);
+
+        if (!document) {
+            return res.status(404).send("Document not found");
+        }
+
+        if (document.owner.toString() !== req.user.id) {
+            return res.status(401).send("Unauthorized");
+        }
+
+        await document.remove();
+
+        return res.status(200).send("Document Deleted");
+    } catch (err) {
+        console.log(err);
+        if (err.kind === "ObjectId") {
+            return res.status(404).send("Document not found");
+        }
+        return res.status(500).send("serverside errors");
+    }
+});
 
 module.exports = router;

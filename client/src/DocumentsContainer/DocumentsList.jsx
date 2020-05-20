@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import DocumentItem from "./DocumentItem";
 import SmallerScreenDocItem from "./SmallerScreenDocItem";
 import { Row, Col, Hidden, Visible } from "react-grid-system";
-import Image from "../Assets/Images/Templates/Doc.png";
 import { Container } from "semantic-ui-react";
 
+// TODO-MAYBE: Might want to encapsualte the two different visualizations of indivuals documents into another file
+// and do the visibilty check (based on screen size) there.
 const formatLastModified = (datastr) => {
     const date = new Date(datastr);
     const now = new Date();
@@ -27,27 +28,8 @@ const formatLastModified = (datastr) => {
 };
 
 const DocumentList = () => {
-    const [documents, setDocuments] = useState([]);
-    const [name, setName] = useState([]); //temp fix for name of doc owner.
-    // when shared docs are incorporated we will present a better fix.
-    useEffect(() => {
-        // because direct async functions are not supported in hooks. for details see
-        // https://github.com/facebook/react/issues/14326
-
-        const fetchDocs = async () => {
-            try {
-                let res = await axios.get("/api/users/");
-
-                // TODO: fix this hack. reversing these makes infinte rendering due to shallow comapare.
-                setDocuments(res.data.owndocs);
-                setName(res.data.name);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-
-        fetchDocs();
-    }, [name]);
+    const documents = useSelector((state) => state.auth.user.owndocs);
+    const name = useSelector((state) => state.auth.user.name);
     return (
         <div>
             <Row justify="center">
@@ -62,6 +44,7 @@ const DocumentList = () => {
                                 timeAccessed={formatLastModified(
                                     val.lastModified
                                 )}
+                                id={val._id}
                             />
                         ))}
                     </Col>

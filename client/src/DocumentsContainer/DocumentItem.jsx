@@ -1,23 +1,39 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { Row, Col } from "react-grid-system";
 import { Icon } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import { Editor } from "../Utils/RoutingConstants";
 import { Dropdown } from "semantic-ui-react";
+import { loadUser } from "../Store/Actions/Auth";
 
-const DropdownSettings = () => (
+const DropdownSettings = (props) => (
     <Dropdown icon="ellipsis vertical">
         <Dropdown.Menu>
             <Dropdown.Header content="settings" />
-            <Dropdown.Item text="Delete" />
+            <Dropdown.Item
+                text="Delete"
+                onClick={() => props.onDeleteHandler(props.id)}
+            />
             <Dropdown.Item text="Rename" />
         </Dropdown.Menu>
     </Dropdown>
 );
 
 const DocumentItem = (props) => {
+    const dispath = useDispatch();
+    const deleteDoc = async (id) => {
+        try {
+            await axios.delete("/api/documents/" + id);
+            dispath(loadUser());
+        } catch (err) {
+            console.log(err.response);
+        }
+    };
+
     const styles = {
         margin: "10px 0px",
         padding: "5px 0px",
@@ -52,7 +68,10 @@ const DocumentItem = (props) => {
                 <Col sm={2}>{props.owner}</Col>
                 <Col sm={2}>{props.timeAccessed}</Col>
                 <Col sm={2}>
-                    <DropdownSettings></DropdownSettings>
+                    <DropdownSettings
+                        onDeleteHandler={deleteDoc}
+                        id={props.id}
+                    ></DropdownSettings>
                 </Col>
             </Row>
         </div>
@@ -65,6 +84,7 @@ DocumentItem.propTypes = {
     isShared: PropTypes.bool.isRequired,
     owner: PropTypes.string.isRequired,
     timeAccessed: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
 };
 
 DocumentItem.defaultProps = {

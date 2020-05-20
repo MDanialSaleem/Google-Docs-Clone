@@ -8,7 +8,6 @@ import {
     Image,
     Icon,
     Dropdown,
-    CardDescription,
 } from "semantic-ui-react";
 
 const DropdownSettings = () => (

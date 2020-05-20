@@ -1,11 +1,12 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Editor } from "../Utils/RoutingConstants";
 import { Card, Image } from "semantic-ui-react";
-
+import { loadUser } from "../Store/Actions/Auth";
 const styles = {
     width: "150px",
     ":hover": {
@@ -15,6 +16,8 @@ const styles = {
 
 const NewDocCard = (props) => {
     const history = useHistory();
+    const dispatch = useDispatch();
+
     const onClickHandler = async () => {
         const config = {
             headers: {
@@ -27,10 +30,11 @@ const NewDocCard = (props) => {
         });
 
         try {
-            console.log("called");
-            const res = await axios.post("/api/documents/", body, config);
+            await axios.post("/api/documents/", body, config);
+            dispatch(loadUser());
         } catch (err) {
-            alert(JSON.stringify(err));
+            alert("error");
+            console.log(JSON.stringify(err));
         }
     };
 
