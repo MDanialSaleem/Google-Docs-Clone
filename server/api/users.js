@@ -16,10 +16,22 @@ const router = express.Router();
 router.get("/", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.user.id)
-            .select("-password")
+            .select("-password -id")
             .populate({
                 path: "owndocs",
-                select: "-content",
+                select: "name lastModified",
+                populate: {
+                    path: "owner",
+                    select: "email",
+                },
+            })
+            .populate({
+                path: "colabdocs",
+                select: "name lastModified",
+                populate: {
+                    path: "owner",
+                    select: "email",
+                },
             });
         return res.status(200).json(user);
     } catch (error) {

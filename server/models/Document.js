@@ -22,6 +22,7 @@ const documentSchema = new mongoose.Schema({
         required: true,
         default: InitialValue,
     },
+    collaborators: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
 });
 
 const documentModel = mongoose.model("document", documentSchema);

@@ -38,6 +38,13 @@ userSchema.virtual("owndocs", {
     justOne: false,
 });
 
+userSchema.virtual("colabdocs", {
+    ref: "document",
+    localField: "_id",
+    foreignField: "collaborators",
+    justOne: false,
+});
+
 const userModel = mongoose.model("user", userSchema);
 
 module.exports = userModel;

@@ -1,6 +1,7 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 const Document = require("../models/Document");
+const User = require("../models/User");
 const authMiddleware = require("../middleware/auth");
 
 const router = express.Router();
@@ -92,4 +93,53 @@ router.get("/:id", authMiddleware, async (req, res) => {
         return res.status(500).send("serverside errors");
     }
 });
+
+// PUT /api/documents/:id. Used to get a single document.
+router.put(
+    "/:id",
+    authMiddleware,
+    [check("collaborator", "Pleas put a valid collaborator email").isEmail()],
+    async (req, res) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        try {
+            const document = await Document.findById(req.params.id);
+            if (!document) {
+                return res.status(404).send("Document not found");
+            }
+
+            if (document.owner.toString() !== req.user.id) {
+                return res.status(401).send("Unauthorized");
+            }
+
+            let { collaborator } = req.body;
+            collaborator = await User.findOne({ email: collaborator });
+
+            if (!collaborator) {
+                return res.status(404).send("This user does not exist");
+            }
+
+            if (
+                document.collaborators.filter(
+                    (currCollaborator) => currCollaborator === collaborator._id
+                ).length === 0
+            ) {
+                // we do nothing if the collaborator is already there.
+                document.collaborators.push(collaborator._id);
+                await document.save();
+            }
+            return res.status(200).send("Collaborator added");
+        } catch (err) {
+            console.log(err);
+            if (err.kind === "ObjectId") {
+                return res.status(404).send("Document not found");
+            }
+            return res.status(500).send("serverside errors");
+        }
+    }
+);
 module.exports = router;
