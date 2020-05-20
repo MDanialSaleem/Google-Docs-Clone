@@ -27,7 +27,7 @@ const NewDocCard = (props) => {
         });
 
         try {
-          console.log("called");
+            console.log("called");
             const res = await axios.post("/api/documents/", body, config);
         } catch (err) {
             alert(JSON.stringify(err));
