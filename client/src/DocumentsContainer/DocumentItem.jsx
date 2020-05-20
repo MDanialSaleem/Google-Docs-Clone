@@ -5,8 +5,6 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { Row, Col } from "react-grid-system";
 import { Icon } from "semantic-ui-react";
-import { useHistory } from "react-router-dom";
-import { Editor } from "../Utils/RoutingConstants";
 import { Dropdown } from "semantic-ui-react";
 import { loadUser } from "../Store/Actions/Auth";
 
@@ -42,12 +40,8 @@ const DocumentItem = (props) => {
             cursor: "pointer",
         },
     };
-
-    const history = useHistory();
-    const onClickHandler = () => history.push(Editor);
-
     return (
-        <div css={styles} onClick={onClickHandler}>
+        <div css={styles}>
             <Row>
                 {/* deprecating the types of documents for now. */}
                 <Col sm={1}>

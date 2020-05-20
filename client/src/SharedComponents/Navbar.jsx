@@ -23,7 +23,7 @@ export default () => {
     const dispath = useDispatch();
     return (
         <div style={navBarStyle}>
-            <Link style={linkStyle}>
+            <Link to={Paths.Home} style={linkStyle}>
                 <b>KAGHAZ</b>
             </Link>
             {isAuthenticated ? (

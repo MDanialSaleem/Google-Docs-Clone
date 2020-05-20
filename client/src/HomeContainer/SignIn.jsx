@@ -27,7 +27,7 @@ const signUpStyle = {
 const ModalPassword = () => (
     <Modal
         trigger={
-            <Button color="black"   style={{ marginBottom: 5 }}>
+            <Button color="black" style={{ marginBottom: 5 }}>
                 Forgot your password?
             </Button>
         }
@@ -39,7 +39,6 @@ const ModalPassword = () => (
                     type="email"
                     style={{ marginBottom: 5 }}
                     placeholder="Email"
-                     
                 />
                 <p>An email to reset your password will be sent to you.</p>
                 <p>It might take 3-5 minutes for you to recieve the email.</p>
@@ -66,10 +65,10 @@ const SignIn = (props) => {
                         ...colStyle,
                     }}
                 >
-                    <h1  >Sign In</h1>
-                    <span  > with your social media account</span>
+                    <h1>Sign In</h1>
+                    <span> with your social media account</span>
                     <Socials />
-                    <span   style={{ marginBottom: 5 }}>
+                    <span style={{ marginBottom: 5 }}>
                         or use your Kaghaz account
                     </span>
                     <SignInForm />
@@ -77,7 +76,6 @@ const SignIn = (props) => {
                         <Button
                             basic
                             color="black"
-                             
                             style={{ marginBottom: 10 }}
                             onClick={props.noAccountHandler}
                         >
@@ -89,16 +87,13 @@ const SignIn = (props) => {
                 <Hidden xs>
                     <Col xs={3} sm={4} md={3} style={signUpStyle}>
                         <Segment basic style={colStyle}>
-                            <h1   style={{ paddingTop: 70 }}>
-                                Hello, Friend!
-                            </h1>
-                            <p  >
+                            <h1 style={{ paddingTop: 70 }}>Hello, Friend!</h1>
+                            <p>
                                 Enter your personal details and start your
                                 journey with us!
                             </p>
                             <Button
                                 color="black"
-                                 
                                 style={{ marginTop: 10 }}
                                 onClick={props.noAccountHandler}
                             >
@@ -115,6 +110,10 @@ const SignIn = (props) => {
 SignIn.propTypes = {
     noAccountHandler: PropTypes.func.isRequired,
     forgotPasswordHandler: PropTypes.func.isRequired,
+};
+
+SignIn.defaultProps = {
+    forgotPasswordHandler: () => console.log("No hander implemented"),
 };
 
 export default SignIn;

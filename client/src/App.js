@@ -25,16 +25,16 @@ function App() {
                 <Navbar />
                 <Switch>
                     <Route path={Paths.Home} exact component={Home} />
-                    <PrivateRoute>
-                        <Route
-                            path={Paths.Documents}
-                            exact
-                            component={Documents}
-                        />
-                    </PrivateRoute>
-                    <PrivateRoute>
-                        <Route path={Paths.Editor} exact component={Editor} />
-                    </PrivateRoute>
+                    <PrivateRoute
+                        path={Paths.Documents}
+                        component={Documents}
+                        exact
+                    />
+                    <PrivateRoute
+                        path={Paths.Editor + "/:id"}
+                        component={Editor}
+                        exact
+                    />
                 </Switch>
             </BrowserRouter>
         </Provider>

@@ -4,6 +4,8 @@ import DocumentItem from "./DocumentItem";
 import SmallerScreenDocItem from "./SmallerScreenDocItem";
 import { Row, Col, Hidden, Visible } from "react-grid-system";
 import { Container } from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
+import { Editor } from "../Utils/RoutingConstants";
 
 // TODO-MAYBE: Might want to encapsualte the two different visualizations of indivuals documents into another file
 // and do the visibilty check (based on screen size) there.
@@ -29,23 +31,29 @@ const formatLastModified = (datastr) => {
 
 const DocumentList = () => {
     const documents = useSelector((state) => state.auth.user.owndocs);
+    const history = useHistory();
+    const onClickHandler = (id) => history.push(Editor + "/" + id);
     const name = useSelector((state) => state.auth.user.name);
+
     return (
         <div>
             <Row justify="center">
                 <Hidden sm xs>
                     <Col xs={8}>
                         {documents.map((val) => (
-                            <DocumentItem
-                                type="doc"
-                                name={val.name}
-                                owner={name}
-                                isShared={false}
-                                timeAccessed={formatLastModified(
-                                    val.lastModified
-                                )}
-                                id={val._id}
-                            />
+                            <div onClick={() => onClickHandler(val._id)}>
+                                <DocumentItem
+                                    key={val.name}
+                                    type="doc"
+                                    name={val.name}
+                                    owner={name}
+                                    isShared={false}
+                                    timeAccessed={formatLastModified(
+                                        val.lastModified
+                                    )}
+                                    id={val._id}
+                                />
+                            </div>
                         ))}
                     </Col>
                 </Hidden>

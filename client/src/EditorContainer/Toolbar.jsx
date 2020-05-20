@@ -6,14 +6,14 @@ import { Icon } from "semantic-ui-react";
 //again, it might seem like an overkill to have seperate files for these samll ui pieces
 //but I expect these to get complex over time so.
 
-const Toolbar = () => (
+const Toolbar = (props) => (
     <>
         <Row align="center">
             <Col xs={1}>
                 <Icon name="file text outline" />
             </Col>
             <Col>
-                <h4>Name</h4>
+                <h4>{props.name}</h4>
             </Col>
         </Row>
         <SubToolbar1 />
