@@ -80,9 +80,9 @@ router.get("/:id", authMiddleware, async (req, res) => {
             return res.status(404).send("Document not found");
         }
 
-        if (document.owner.toString() !== req.user.id) {
-            return res.status(401).send("Unauthorized");
-        }
+        // if (document.owner.toString() !== req.user.id) {
+        //     return res.status(401).send("Unauthorized");
+        // }
 
         return res.status(200).json(document);
     } catch (err) {
@@ -94,7 +94,7 @@ router.get("/:id", authMiddleware, async (req, res) => {
     }
 });
 
-// PUT /api/documents/:id. Used to get a single document.
+// PUT /api/documents/:id. Used to add collaborators.
 router.put(
     "/:id",
     authMiddleware,

@@ -2,12 +2,14 @@
 import { jsx } from "@emotion/core";
 import { useState, useMemo, useEffect } from "react";
 import axios from "axios";
+import openSocket from "socket.io-client";
+//Own Components.
+import { SOCKET_ACTIONS } from "../commonConstants";
 import Toolbar from "./Toolbar";
 import DocEditor from "./DocEditor";
 import { Row, Col } from "react-grid-system";
 import EditorFooter from "./EditorFooter";
 import EditorState from "./EditorContext/State";
-import initialValue from "./EditorUtils/InitialValue";
 import { createEditor } from "slate";
 import { withHistory } from "slate-history";
 import { Slate, withReact } from "slate-react";
@@ -20,6 +22,8 @@ const Editor = (props) => {
 
     const [value, setValue] = useState(null);
     const [name, setName] = useState(null);
+    const [socket, setSocket] = useState(null);
+    const [loading, setLoading] = useState(true);
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
     useEffect(() => {
@@ -29,19 +33,44 @@ const Editor = (props) => {
                 const res = await axios.get("/api/documents/" + id);
                 setName(res.data.name);
                 setValue(res.data.content);
+                setLoading(false);
             } catch (err) {
                 console.log(err);
             }
         };
         fetchDoc(props.match.params.id);
-    }, [value]);
-    return value ? (
+    }, []);
+
+    useEffect(() => {
+        let socket = openSocket();
+        socket.emit(SOCKET_ACTIONS.JOIN_ROOM, { id: props.match.params.id });
+        
+        socket.on(SOCKET_ACTIONS.UPDATE_VALUE, (payload) => {
+            setValue(payload.newValue);
+        });
+        setSocket(socket);
+        return () => {
+            socket.emit(SOCKET_ACTIONS.LEAVE_ROOM, {
+                id: props.match.params.id,
+            });
+            socket.disconnect(true);
+        };
+    }, []);
+
+    const onChangeEventHandler = (value) => {
+        setValue(value);
+        socket.emit(SOCKET_ACTIONS.UPDATE_VALUE, {
+            newValue: value,
+            room: props.match.params.id,
+        });
+    };
+    return !loading ? (
         <div>
             <EditorState>
                 <Slate
                     editor={editor}
                     value={value}
-                    onChange={(value) => setValue(value)}
+                    onChange={onChangeEventHandler}
                 >
                     <Toolbar name={name} />
                     <Row css={style} justify="center">

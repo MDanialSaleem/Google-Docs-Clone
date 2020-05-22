@@ -31,10 +31,12 @@ const formatLastModified = (datastr) => {
 
 const DocumentList = () => {
     const documents = useSelector((state) => state.auth.user.owndocs);
+    const shareddocuments = useSelector((state) => state.auth.user.colabdocs);
     const history = useHistory();
     const onClickHandler = (id) => history.push(Editor + "/" + id);
     const name = useSelector((state) => state.auth.user.name);
 
+    // THE LISTING IS A TEMP FIX.
     return (
         <div>
             <Row justify="center">
@@ -48,6 +50,27 @@ const DocumentList = () => {
                                     name={val.name}
                                     owner={name}
                                     isShared={false}
+                                    timeAccessed={formatLastModified(
+                                        val.lastModified
+                                    )}
+                                    id={val._id}
+                                />
+                            </div>
+                        ))}
+                    </Col>
+                </Hidden>
+            </Row>
+            <Row justify="center">
+                <Hidden sm xs>
+                    <Col xs={8}>
+                        {shareddocuments.map((val) => (
+                            <div onClick={() => onClickHandler(val._id)}>
+                                <DocumentItem
+                                    key={val.name}
+                                    type="doc"
+                                    name={val.name}
+                                    owner={val.owner.email}
+                                    isShared={true}
                                     timeAccessed={formatLastModified(
                                         val.lastModified
                                     )}
