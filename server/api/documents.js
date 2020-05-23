@@ -80,9 +80,12 @@ router.get("/:id", authMiddleware, async (req, res) => {
             return res.status(404).send("Document not found");
         }
 
-        // if (document.owner.toString() !== req.user.id) {
-        //     return res.status(401).send("Unauthorized");
-        // }
+        if (
+            document.owner.toString() !== req.user.id &&
+            document.collaborators.indexOf(req.user.id) === -1
+        ) {
+            return res.status(401).send("Unauthorized");
+        }
 
         return res.status(200).json(document);
     } catch (err) {
@@ -94,12 +97,20 @@ router.get("/:id", authMiddleware, async (req, res) => {
     }
 });
 
-// PUT /api/documents/:id. Used to add collaborators.
+// PUT /api/documents/share/:id. Used to add/remove collaborators.
 router.put(
-    "/:id",
+    "/share/:id",
     authMiddleware,
-    [check("collaborator", "Pleas put a valid collaborator email").isEmail()],
+    [
+        check("collaborator", "Pleas put a valid collaborator email").isEmail(),
+        check(
+            "share",
+            "Share must be present and should either be true or false"
+        ).isBoolean(),
+    ],
     async (req, res) => {
+        // this route is really long. maybe consider breaking it down into multiple routes.
+
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
@@ -112,27 +123,44 @@ router.put(
                 return res.status(404).send("Document not found");
             }
 
-            if (document.owner.toString() !== req.user.id) {
-                return res.status(401).send("Unauthorized");
-            }
-
-            let { collaborator } = req.body;
-            collaborator = await User.findOne({ email: collaborator });
-
-            if (!collaborator) {
+            let { collaborator: newCollaborator, share } = req.body;
+            newCollaborator = await User.findOne({ email: newCollaborator });
+            if (!newCollaborator) {
                 return res.status(404).send("This user does not exist");
             }
 
-            if (
-                document.collaborators.filter(
-                    (currCollaborator) => currCollaborator === collaborator._id
-                ).length === 0
-            ) {
-                // we do nothing if the collaborator is already there.
-                document.collaborators.push(collaborator._id);
-                await document.save();
+            const index = document.collaborators.indexOf(newCollaborator._id);
+
+            if (share) {
+                // only the owner can add more collabortors.
+                if (document.owner.toString() !== req.user.id) {
+                    return res.status(401).send("Unauthorized");
+                }
+                if (index === -1) {
+                    // we do nothing if the collaborator is already there.
+                    document.collaborators.push(newCollaborator._id);
+                    // you may want to move this out of the if condition since it happens for both checks but no, not a good idea becaue then it will
+                    // do an unncessary db call even if the collabroator had already been added or even if he wasn't present in case of remove.
+                    await document.save();
+                }
+                return res.status(200).send("Collaborator added");
             }
-            return res.status(200).send("Collaborator added");
+
+            if (!share) {
+                //we let either the owner or the collaborator remove himself from collaborators.
+                if (
+                    document.owner.toString() !== req.user.id &&
+                    newCollaborator._id.toString() !== req.user.id
+                ) {
+                    return res.status(401).send("Unauthorized");
+                }
+                if (index !== -1) {
+                    // we do nothing if the collaborator is not present.
+                    document.collaborators.splice(index, 1);
+                    await document.save();
+                }
+                return res.status(200).send("Collaborator removed");
+            }
         } catch (err) {
             console.log(err);
             if (err.kind === "ObjectId") {
@@ -142,4 +170,5 @@ router.put(
         }
     }
 );
+
 module.exports = router;
