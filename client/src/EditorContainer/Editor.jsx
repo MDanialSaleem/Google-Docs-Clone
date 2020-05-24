@@ -43,15 +43,18 @@ const Editor = (props) => {
 
     useEffect(() => {
         let socket = openSocket();
-        socket.emit(SOCKET_ACTIONS.JOIN_ROOM, { id: props.match.params.id });
-        
+        socket.emit(SOCKET_ACTIONS.JOIN_ROOM, {
+            document: props.match.params.id,
+            token: window.localStorage.token,
+        });
         socket.on(SOCKET_ACTIONS.UPDATE_VALUE, (payload) => {
             setValue(payload.newValue);
         });
         setSocket(socket);
         return () => {
             socket.emit(SOCKET_ACTIONS.LEAVE_ROOM, {
-                id: props.match.params.id,
+                document: props.match.params.id,
+                token: window.localStorage.token,
             });
             socket.disconnect(true);
         };
@@ -61,7 +64,7 @@ const Editor = (props) => {
         setValue(value);
         socket.emit(SOCKET_ACTIONS.UPDATE_VALUE, {
             newValue: value,
-            room: props.match.params.id,
+            documentId: props.match.params.id,
         });
     };
     return !loading ? (

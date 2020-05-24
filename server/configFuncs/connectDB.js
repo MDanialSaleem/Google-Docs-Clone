@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const constants = require("./constants");
+const constants = require("../constants");
 
 // Establishes connection with mongodb.
 
