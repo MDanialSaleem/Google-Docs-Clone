@@ -1,25 +1,43 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import React from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { Row, Col } from "react-grid-system";
 import { Icon } from "semantic-ui-react";
 import { Dropdown } from "semantic-ui-react";
+import RenameModal from "../SharedComponents/RenameModal";
 import { loadUser } from "../Store/Actions/Auth";
 
-const DropdownSettings = (props) => (
-    <Dropdown icon="ellipsis vertical">
-        <Dropdown.Menu>
-            <Dropdown.Header content="settings" />
-            <Dropdown.Item
-                text="Delete"
-                onClick={() => props.onDeleteHandler(props.id)}
-            />
-            <Dropdown.Item text="Rename" />
-        </Dropdown.Menu>
-    </Dropdown>
-);
+const DropdownSettings = (props) => {
+    const [modalOpen, setModalOpen] = React.useState(false);
+    const dispatch = useDispatch();
+    return (
+        <div>
+            <Dropdown icon="ellipsis vertical">
+                <Dropdown.Menu>
+                    <Dropdown.Item
+                        text="Delete"
+                        onClick={() => props.onDeleteHandler(props.id)}
+                    />
+                    <Dropdown.Item
+                        text="Rename"
+                        onClick={() => setModalOpen(true)}
+                    />
+                    <RenameModal
+                        open={modalOpen}
+                        onClose={() => {
+                            setModalOpen(false);
+                            dispatch(loadUser());
+                        }}
+                        id={props.id}
+                    />
+                </Dropdown.Menu>
+            </Dropdown>
+        </div>
+    );
+};
 
 const DocumentItem = (props) => {
     const dispath = useDispatch();
