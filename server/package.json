@@ -12,13 +12,17 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "camo": "^0.12.3",
     "express": "^4.17.1",
     "express-validator": "^6.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.7",
+    "nedb": "^1.8.0",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
+    "@types/camo": "^0.12.1",
+    "@types/nedb": "^1.8.9",
     "nodemon": "^2.0.3"
   }
 }
