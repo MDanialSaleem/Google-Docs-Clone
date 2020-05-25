@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import DocumentItem from "./DocumentItem";
 import SmallerScreenDocItem from "./SmallerScreenDocItem";
 import { Row, Col, Hidden, Visible } from "react-grid-system";
-import { Container } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import { Editor } from "../Utils/RoutingConstants";
 
@@ -34,43 +33,21 @@ const DocumentList = () => {
     const shareddocuments = useSelector((state) => state.auth.user.colabdocs);
     const history = useHistory();
     const onClickHandler = (id) => history.push(Editor + "/" + id);
-    const name = useSelector((state) => state.auth.user.name);
 
     // THE LISTING IS A TEMP FIX.
     return (
         <div>
-            <Row justify="center">
-                <Hidden sm xs>
+            <Hidden sm xs>
+                <Row justify="center">
                     <Col xs={8}>
-                        {documents.map((val) => (
-                            <div onClick={() => onClickHandler(val._id)}>
-                                <DocumentItem
-                                    key={val.name}
-                                    type="doc"
-                                    name={val.name}
-                                    owner={name}
-                                    isShared={false}
-                                    timeAccessed={formatLastModified(
-                                        val.lastModified
-                                    )}
-                                    id={val._id}
-                                />
-                            </div>
-                        ))}
-                    </Col>
-                </Hidden>
-            </Row>
-            <Row justify="center">
-                <Hidden sm xs>
-                    <Col xs={8}>
-                        {shareddocuments.map((val) => (
+                        {documents.concat(shareddocuments).map((val) => (
                             <div onClick={() => onClickHandler(val._id)}>
                                 <DocumentItem
                                     key={val.name}
                                     type="doc"
                                     name={val.name}
                                     owner={val.owner.email}
-                                    isShared={true}
+                                    isShared={val.collaborators ? true : false}
                                     timeAccessed={formatLastModified(
                                         val.lastModified
                                     )}
@@ -79,27 +56,26 @@ const DocumentList = () => {
                             </div>
                         ))}
                     </Col>
-                </Hidden>
-            </Row>
-
+                </Row>
+            </Hidden>
             <Visible sm xs>
-                <Container fluid>
-                    <Row align="start" debug xs={12} sm={4}>
-                        {documents.map((val) => (
-                            <Col style={{ padding: "5px 5px" }}>
-                                <SmallerScreenDocItem
-                                    type="doc"
-                                    name={val.name}
-                                    owner={name}
-                                    isShared={false}
-                                    timeAccessed={formatLastModified(
-                                        val.lastModified
-                                    )}
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                </Container>
+                <Row>
+                    {documents.concat(shareddocuments).map((val) => (
+                        <Col xs={4} onClick={() => onClickHandler(val._id)}>
+                            <SmallerScreenDocItem
+                                key={val.name}
+                                type="doc"
+                                name={val.name}
+                                owner={val.owner.email}
+                                isShared={val.collaborators ? true : false}
+                                timeAccessed={formatLastModified(
+                                    val.lastModified
+                                )}
+                                id={val._id}
+                            />
+                        </Col>
+                    ))}
+                </Row>
             </Visible>
         </div>
     );

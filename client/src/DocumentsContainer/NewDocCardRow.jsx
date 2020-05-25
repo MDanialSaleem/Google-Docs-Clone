@@ -1,60 +1,70 @@
 import React from "react";
 import NewDocCard from "./NewDocCard";
 import BlankImg from "../Assets/Images/Templates/Blank.png";
-import ResumeImg from "../Assets/Images/Templates/Resume.png";
 import { Row, Col, Hidden, Visible } from "react-grid-system";
 import LetterImg from "../Assets/Images/Templates/Letter.png";
-import ProjectProposalImg from "../Assets/Images/Templates/ProjectProposal.png";
-import BrochureImg from "../Assets/Images/Templates/Brochure.png";
-import RecipeImg from "../Assets/Images/Templates/Recipe.png";
 import { Button } from "semantic-ui-react";
 import * as Paths from "../Utils/RoutingConstants";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loadUser } from "../Store/Actions/Auth";
 
 const styles = {
     background: "lightgrey",
     padding: "20px 0px",
 };
 
-const NewDocCardRow = () => (
-    <div style={styles}>
-        <Hidden sm xs>
-            <Row style={{ paddingBottom: "5px" }} justify="center">
-                <Col xs={3}>
-                    <h3>Create A New Document</h3>
-                </Col>
-            </Row>
+const NewDocCardRow = () => {
+    const dispatch = useDispatch();
 
-            <Row justify="center">
-                <Col xs="content">
-                    <NewDocCard title="Blank" imageUrl={BlankImg} />
-                </Col>
-                <Col xs="content">
-                    <NewDocCard title="Resume" imageUrl={ResumeImg} />
-                </Col>
-                <Col xs="content">
-                    <NewDocCard title="Letter" imageUrl={LetterImg} />
-                </Col>
-                <Col xs="content">
-                    <NewDocCard title="Project" imageUrl={ProjectProposalImg} />
-                </Col>
-                <Col xs="content">
-                    <NewDocCard title="Brochure" imageUrl={BrochureImg} />
-                </Col>
-                <Col xs="content">
-                    <NewDocCard title="Recipe" imageUrl={RecipeImg} />
-                </Col>
-            </Row>
-        </Hidden>
+    const onClickHandler = async () => {
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
 
-        <Visible sm xs>
-            <Row style={{ paddingBottom: "5px" }} justify="center">
-                <Link to={Paths.Editor}>
-                    <Button color="black">Create a New Document</Button>
-                </Link>
-            </Row>
-        </Visible>
-    </div>
-);
+        const body = JSON.stringify({
+            name: "Untitled",
+        });
+
+        try {
+            await axios.post("/api/documents/", body, config);
+            dispatch(loadUser());
+        } catch (err) {
+            alert("error");
+            console.log(JSON.stringify(err));
+        }
+    };
+    return (
+        <div style={styles}>
+            <Hidden sm xs>
+                <Row style={{ paddingBottom: "5px" }} justify="center">
+                    <Col xs={3}>
+                        <h3>Create A New Document</h3>
+                    </Col>
+                </Row>
+
+                <Row justify="center">
+                    <Col xs="content" onClick={onClickHandler}>
+                        <NewDocCard title="Blank" imageUrl={BlankImg} />
+                    </Col>
+                    <Col xs="content">
+                        <NewDocCard title="Letter" imageUrl={LetterImg} />
+                    </Col>
+                </Row>
+            </Hidden>
+
+            <Visible sm xs>
+                <Row style={{ paddingBottom: "5px" }} justify="center">
+                    <Button color="black" onClick={onClickHandler}>
+                        Create a New Document
+                    </Button>
+                </Row>
+            </Visible>
+        </div>
+    );
+};
 
 export default NewDocCardRow;

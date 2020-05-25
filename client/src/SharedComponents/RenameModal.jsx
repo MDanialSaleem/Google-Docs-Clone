@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import React from "react";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 import { Button, Form, Modal } from "semantic-ui-react";
@@ -14,10 +15,10 @@ const RenameModal = (props) => {
     };
 
     return (
-        <div>
+        <React.Fragment>
             <Modal
                 open={props.open}
-                size="tiny"
+                size="mini"
                 closeIcon
                 onClose={props.onClose}
             >
@@ -30,13 +31,15 @@ const RenameModal = (props) => {
                                 name="name"
                                 placeholder="New Name"
                                 ref={register}
+                                autoComplete="off"
+                                autoFocus
                             />
                         </Form.Field>
                         <Button type="submit" positive icon="checkmark" />
                     </Form>
                 </Modal.Actions>
             </Modal>
-        </div>
+        </React.Fragment>
     );
 };
 
