@@ -12,6 +12,7 @@ const EditorState = (props) => {
         [StyleConstants.BACKGROUND_COLOR]: "#FFFFFF",
         focused: true,
         selection: null,
+        editable: true,
     };
 
     const [state, dispatch] = useReducer(Reducer, initialState);
@@ -45,6 +46,12 @@ const EditorState = (props) => {
             dispatch({
                 type: Actions.SET_BG_COLOR,
                 data: newColor,
+            });
+        },
+        setEdit: (mode) => {
+            dispatch({
+                type: Actions.SET_EDIT,
+                data: mode,
             });
         },
         focus: () => dispatch({ type: Actions.FOCUS }),

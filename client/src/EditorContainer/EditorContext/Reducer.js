@@ -38,6 +38,11 @@ export default (state, action) => {
                 ...state,
                 selection: action.data,
             };
+        case Actions.SET_EDIT:
+            return {
+                ...state,
+                editable: action.data,
+            };
         default:
     }
 };

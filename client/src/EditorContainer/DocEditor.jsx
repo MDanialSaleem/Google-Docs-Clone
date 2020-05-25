@@ -6,7 +6,7 @@ import EditorContext from "./EditorContext/Context";
 import CustomHelpers from "./EditorUtils/CustomHelpers";
 import StyleConstants from "./EditorUtils/StyleConstants";
 
-const DocEditor = () => {
+const DocEditor = (props) => {
     const editorContext = useContext(EditorContext);
     const editor = useSlate();
 
@@ -18,7 +18,6 @@ const DocEditor = () => {
         (props) => <CustomElements.Leaf {...props} />,
         []
     );
-
     const onmousedownhandler = () => {
         if (!editorContext.focused) {
             editorContext.focus();
@@ -50,6 +49,7 @@ const DocEditor = () => {
         editorContext.blur();
     };
 
+    console.log(editorContext.editable);
     return (
         <Editable
             renderElement={renderElement}
@@ -61,7 +61,7 @@ const DocEditor = () => {
             onBlur={blurHandler}
             onClick={onmousedownhandler}
             style={{ minHeight: "500px", backgroundColor: "white" }}
-            readOnly
+            readOnly={!editorContext.editable}
         />
     );
 };

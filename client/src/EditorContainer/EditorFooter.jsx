@@ -22,7 +22,11 @@ const EditorFooter = (props) => {
             gutterWidth={0}
         >
             <Col sm={4}>
-                <h4>Action: User 1 editing</h4>
+                {props.active ? (
+                    <h4>Action: {props.active} editing</h4>
+                ) : (
+                    <h4>Idle</h4>
+                )}
             </Col>
             <Col style={{ display: "flex", justifyContent: "flex-end" }} sm={8}>
                 <Popup trigger={<Button>Active Users</Button>}>

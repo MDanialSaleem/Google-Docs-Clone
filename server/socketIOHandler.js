@@ -26,6 +26,7 @@ module.exports = (socket) => {
                 title: mongoDocument.name,
                 document: mongoDocument.content,
                 users: [{ userId, name }],
+                activeUser: null,
             });
             await room.save();
         }
@@ -33,7 +34,9 @@ module.exports = (socket) => {
         socketServer.to(socket.id).emit(SOCKET_ACTIONS.JOIN_ACCEPTED, {
             newValue: room.document,
             onlineUsers: room.users.map((user) => user.name),
+            permission: false,
         });
+        // send to other clients informing that a new user has joined.
         socket.to(toString(payload.room)).emit(SOCKET_ACTIONS.USERS_CHANGED, {
             onlineUsers: room.users.map((user) => user.name),
         });
@@ -47,6 +50,10 @@ module.exports = (socket) => {
         socket.to(toString(payload.room)).emit(SOCKET_ACTIONS.UPDATE_VALUE, {
             newValue: payload.newValue,
         });
+    });
+
+    socket.on(SOCKET_ACTIONS.EDIT_REQUEST, (payload, callback) => {
+        callback({ permission: true });
     });
 
     socket.on(SOCKET_ACTIONS.LEAVE_ROOM, async (payload) => {
@@ -65,11 +72,12 @@ module.exports = (socket) => {
             await room.delete();
         } else {
             await room.save();
-            socket.to(toString(payload.room)).emit(SOCKET_ACTIONS.USERS_CHANGED, {
-                onlineUsers: room.users.map((user) => user.name),
-            });
+            socket
+                .to(toString(payload.room))
+                .emit(SOCKET_ACTIONS.USERS_CHANGED, {
+                    onlineUsers: room.users.map((user) => user.name),
+                });
         }
-
     });
     socket.on("disconnect", () => {});
 };
