@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import { Row, Col } from "react-grid-system";
-import { Item, Button, Popup } from "semantic-ui-react";
+import { Item, Button, Popup, Form } from "semantic-ui-react";
 
-const EditorFooter = () => {
+const EditorFooter = (props) => {
     const footerStyles = {
         position: "sticky",
         bottom: 0,
@@ -28,8 +28,11 @@ const EditorFooter = () => {
                 <Popup trigger={<Button>Active Users</Button>}>
                     <Popup.Content>
                         <Item.Group>
-                            <Item.Header>User 1</Item.Header>
-                            <Item.Header>User 2</Item.Header>
+                            {props.users
+                                ? props.users.map((val) => (
+                                      <Item.Header>{val}</Item.Header>
+                                  ))
+                                : null}
                         </Item.Group>
                     </Popup.Content>
                 </Popup>

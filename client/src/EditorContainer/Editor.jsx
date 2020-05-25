@@ -14,6 +14,8 @@ import { createEditor } from "slate";
 import { withHistory } from "slate-history";
 import { Slate, withReact } from "slate-react";
 import SubToolBar2 from "./SubToolbar2";
+import { useContext } from "react";
+import EditorContext from "./EditorContext/Context";
 
 const Editor = (props) => {
     const style = {
@@ -25,6 +27,7 @@ const Editor = (props) => {
     const [socket, setSocket] = useState(null);
     const [loading, setLoading] = useState(true);
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+    const [onlineUsers, setOnlineUsers] = useState([]);
 
     useEffect(() => {
         // because effects cannot direcrlt use aync functions.
@@ -49,6 +52,14 @@ const Editor = (props) => {
         });
         socket.on(SOCKET_ACTIONS.UPDATE_VALUE, (payload) => {
             setValue(payload.newValue);
+        });
+        socket.on(SOCKET_ACTIONS.JOIN_ACCEPTED, (payload) => {
+            console.log(payload);
+            setValue(payload.newValue);
+            setOnlineUsers(payload.onlineUsers);
+        });
+        socket.on(SOCKET_ACTIONS.USERS_CHANGED, (payload) => {
+            setOnlineUsers(payload.onlineUsers);
         });
         setSocket(socket);
         return () => {
@@ -82,7 +93,7 @@ const Editor = (props) => {
                             <DocEditor />
                         </Col>
                     </Row>
-                    <EditorFooter />
+                    <EditorFooter users={onlineUsers} />
                 </Slate>
             </EditorState>
         </div>

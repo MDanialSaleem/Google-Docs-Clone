@@ -2,7 +2,6 @@ import React, { useCallback, useContext } from "react";
 import { Editable, useSlate } from "slate-react";
 import CustomElements from "./EditorUtils/CustomElements";
 import EventHandlers from "./EditorUtils/EventHandlers";
-import SubToolBar2 from "./SubToolbar2";
 import EditorContext from "./EditorContext/Context";
 import CustomHelpers from "./EditorUtils/CustomHelpers";
 import StyleConstants from "./EditorUtils/StyleConstants";
@@ -62,6 +61,7 @@ const DocEditor = () => {
             onBlur={blurHandler}
             onClick={onmousedownhandler}
             style={{ minHeight: "500px", backgroundColor: "white" }}
+            readOnly
         />
     );
 };

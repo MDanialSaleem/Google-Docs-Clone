@@ -8,7 +8,7 @@ class Room extends Document {
         this.docID = String;
         this.title = String;
         this.document = Object;
-        this.users = [String];
+        this.users = [Object];
     }
 
     static collectionName() {

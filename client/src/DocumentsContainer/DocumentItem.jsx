@@ -11,6 +11,23 @@ import RenameModal from "../SharedComponents/RenameModal";
 import { loadUser } from "../Store/Actions/Auth";
 
 const DropdownSettings = (props) => {
+    const onSubmit = async (name) => {
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        const body = JSON.stringify({ name });
+        try {
+            const res = await axios.put(
+                `/api/documents/${props.id}`,
+                body,
+                config
+            );
+        } catch (error) {
+            console.log("server error");
+        }
+    };
     const [modalOpen, setModalOpen] = React.useState(false);
     const dispatch = useDispatch();
     return (
@@ -31,7 +48,7 @@ const DropdownSettings = (props) => {
                             setModalOpen(false);
                             dispatch(loadUser());
                         }}
-                        id={props.id}
+                        onSubmit={onSubmit}
                     />
                 </Dropdown.Menu>
             </Dropdown>

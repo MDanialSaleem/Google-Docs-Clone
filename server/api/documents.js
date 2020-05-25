@@ -97,6 +97,40 @@ router.get("/:id", authMiddleware, async (req, res) => {
     }
 });
 
+// PUT /api/documents/:id Used to update name only. Since the content is only updated through the socket io connection..
+router.put(
+    "/:id",
+    authMiddleware,
+    [check("name", "Name must not be empty").notEmpty()],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { name } = req.body;
+        try {
+            const document = await Document.findById(req.params.id);
+            if (!document) {
+                return res.status(404).send("Document not found");
+            }
+
+            if (
+                document.owner.toString() !== req.user.id &&
+                document.collaborators.indexOf(req.user.id) === -1
+            ) {
+                return res.status(401).send("Unauthorized");
+            }
+
+            document.name = name;
+            await document.save();
+            return res.status(200).send("Successfully renamed");
+        } catch (errors) {
+            return res.status(500).send("serverside errors");
+        }
+    }
+);
+
 // PUT /api/documents/share/:id. Used to add/remove collaborators.
 router.put(
     "/share/:id",
