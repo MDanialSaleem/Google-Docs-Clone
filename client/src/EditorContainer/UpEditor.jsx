@@ -63,6 +63,9 @@ const Editor = (props) => {
         socket.on(SOCKET_ACTIONS.USERS_CHANGED, (payload) => {
             setOnlineUsers(payload.onlineUsers);
         });
+        socket.on(SOCKET_ACTIONS.ACTIVE_CHANGED, (payload) => {
+            setActiveUser(payload.active);
+        });
         setSocket(socket);
         return () => {
             socket.emit(SOCKET_ACTIONS.LEAVE_ROOM, {
@@ -78,6 +81,7 @@ const Editor = (props) => {
         socket.emit(SOCKET_ACTIONS.UPDATE_VALUE, {
             newValue: value,
             documentId: props.docID,
+            token: window.localStorage.token,
         });
     };
     return !loading ? (
@@ -88,7 +92,7 @@ const Editor = (props) => {
                 onChange={onChangeEventHandler}
             >
                 <Toolbar name={name} />
-                <SubToolbar1 socket={socket} setEditState={setEditState} />
+                <SubToolbar1 socket={socket} docID={props.docID} />
                 <Row css={style} justify="center">
                     <Col xs={10}>
                         <SubToolBar2 />

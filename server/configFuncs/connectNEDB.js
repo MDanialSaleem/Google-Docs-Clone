@@ -9,7 +9,7 @@ class Room extends Document {
         this.title = String;
         this.document = Object;
         this.users = [Object];
-        this.activeUser = Object
+        this.activeUser = String
     }
 
     static collectionName() {

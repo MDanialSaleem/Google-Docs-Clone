@@ -35,12 +35,28 @@ const ExportDropdown = () => {
 
 const SubToolbar1 = (props) => {
     const editorContext = useContext(EditorContext);
-    const onEditClick = (event) => {
-        props.socket.emit(SOCKET_ACTIONS.EDIT_REQUEST, {}, function (payload) {
-            if (payload.permission) {
-                editorContext.setEdit(true);
+    const onEditClick = () => {
+        props.socket.emit(
+            SOCKET_ACTIONS.EDIT_REQUEST,
+            { documentId: props.docID, token: window.localStorage.token },
+            (payload) => {
+                if (payload.permission) {
+                    editorContext.setEdit(true);
+                }
             }
-        });
+        );
+    };
+
+    const onViewClick = () => {
+        props.socket.emit(
+            SOCKET_ACTIONS.VIEW_REQUEST,
+            { documentId: props.docID, token: window.localStorage.token },
+            (payload) => {
+                if (payload.permission) {
+                    editorContext.setEdit(false);
+                }
+            }
+        );
     };
     return (
         <div style={{ background: "grey", padding: 5 }}>
@@ -55,7 +71,21 @@ const SubToolbar1 = (props) => {
                     <Button>Collaborate</Button>
                 </Col>
                 <Col style={{ textAlign: "center" }} xs={3} md={3} lg={3}>
-                    <Button onClick={onEditClick}>Edit</Button>
+                    <Button.Group>
+                        <Button
+                            disabled={editorContext.editable}
+                            onClick={onEditClick}
+                        >
+                            Edit
+                        </Button>
+                        <Button.Or text="" />
+                        <Button
+                            disabled={!editorContext.editable}
+                            onClick={onViewClick}
+                        >
+                            View
+                        </Button>
+                    </Button.Group>
                 </Col>
             </Row>
         </div>

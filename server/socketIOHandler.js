@@ -44,29 +44,68 @@ module.exports = (socket) => {
 
     socket.on(SOCKET_ACTIONS.UPDATE_VALUE, async (payload) => {
         const room = await Room.findOne({ docID: payload.documentId });
-
-        room.document = payload.newValue;
-        await room.save(); //first save to in memory store and then emit.
-        socket.to(toString(payload.room)).emit(SOCKET_ACTIONS.UPDATE_VALUE, {
-            newValue: payload.newValue,
-        });
+        const userId = jwt.verify(payload.token, keys.jwtSecret).user.id;
+        const { name } = await User.findById(userId);
+        if (name === room.activeUser) {
+            room.document = payload.newValue;
+            await room.save(); //first save to in memory store and then emit.
+            socket
+                .to(toString(payload.documentId))
+                .emit(SOCKET_ACTIONS.UPDATE_VALUE, {
+                    newValue: payload.newValue,
+                });
+        }
     });
 
-    socket.on(SOCKET_ACTIONS.EDIT_REQUEST, (payload, callback) => {
+    socket.on(SOCKET_ACTIONS.EDIT_REQUEST, async (payload, callback) => {
+        const userId = jwt.verify(payload.token, keys.jwtSecret).user.id;
+        const { name } = await User.findById(userId);
+        const room = await Room.findOne({ docID: payload.documentId });
+
+        if (room.activeUser) {
+            callback({ permission: false });
+        } else {
+            room.activeUser = name;
+            await room.save();
+            callback({ permission: true });
+            socketServer
+                .in(toString(payload.documentId))
+                .emit(SOCKET_ACTIONS.ACTIVE_CHANGED, {
+                    active: name,
+                });
+        }
+    });
+
+    socket.on(SOCKET_ACTIONS.VIEW_REQUEST, async (payload, callback) => {
+        const room = await Room.findOne({ docID: payload.documentId });
+        room.activeUser = null;
+        await room.save();
         callback({ permission: true });
+        socketServer
+            .in(toString(payload.documentId))
+            .emit(SOCKET_ACTIONS.ACTIVE_CHANGED, {
+                active: null,
+            });
     });
-
     socket.on(SOCKET_ACTIONS.LEAVE_ROOM, async (payload) => {
-        console.log("LEFT");
         const documentId = payload.document;
         const userId = jwt.verify(payload.token, keys.jwtSecret).user.id;
-        const mongoDocument = await Document.findById(documentId);
-
+        const { name } = await User.findById(userId);
         const room = await Room.findOne({ docID: documentId });
+
         room.users = room.users.filter((user) => user.userId !== userId);
+        if (room.activeUser === name) {
+            room.activeUser = null;
+            socketServer
+                .in(toString(payload.documentId))
+                .emit(SOCKET_ACTIONS.ACTIVE_CHANGED, {
+                    active: null,
+                });
+        }
 
         // if the last user editing the document has left, save everything to mongo and delete the store.
         if (room.users.length === 0) {
+            const mongoDocument = await Document.findById(documentId);
             mongoDocument.content = room.document;
             await mongoDocument.save();
             await room.delete();

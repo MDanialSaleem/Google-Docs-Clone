@@ -48,8 +48,6 @@ const DocEditor = (props) => {
         editorContext.setSelection(editor.selection);
         editorContext.blur();
     };
-
-    console.log(editorContext.editable);
     return (
         <Editable
             renderElement={renderElement}
