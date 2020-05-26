@@ -97,6 +97,30 @@ router.get("/:id", authMiddleware, async (req, res) => {
     }
 });
 
+//GET /api/documents/share/:id used to get the emails of collaborators.
+router.get("/share/:id", authMiddleware, async (req, res) => {
+    try {
+        const document = await Document.findById(req.params.id)
+            .select("owner collaborators")
+            .populate({
+                path: "collaborators",
+                select: "email",
+            });
+
+        if (!document) {
+            return res.status(400).send("Document not found");
+        }
+
+        if (document.owner.toString() !== req.user.id) {
+            return res.status(401).send("Unauthorized");
+        }
+        return res.status(200).json(document);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("Serverside error");
+    }
+});
+
 // PUT /api/documents/:id Used to update name only. Since the content is only updated through the socket io connection..
 router.put(
     "/:id",

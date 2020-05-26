@@ -39,7 +39,7 @@ const DocumentList = () => {
         <div>
             <Hidden sm xs>
                 <Row justify="center">
-                    <Col xs={8}>
+                    <Col xs={12}>
                         {documents.concat(shareddocuments).map((val) => (
                             <div onClick={() => onClickHandler(val._id)}>
                                 <DocumentItem
@@ -61,7 +61,7 @@ const DocumentList = () => {
             <Visible sm xs>
                 <Row>
                     {documents.concat(shareddocuments).map((val) => (
-                        <Col xs={4} onClick={() => onClickHandler(val._id)}>
+                        <Col xs={12} sm={6} onClick={() => onClickHandler(val._id)}>
                             <SmallerScreenDocItem
                                 key={val.name}
                                 type="doc"

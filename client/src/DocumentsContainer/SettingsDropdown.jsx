@@ -1,6 +1,7 @@
 import React from "react";
 import { Dropdown } from "semantic-ui-react";
 import RenameModal from "../SharedComponents/RenameModal";
+import ShareModal from "../SharedComponents/ShareModal";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../Store/Actions/Auth";
 import axios from "axios";
@@ -31,6 +32,7 @@ const SettingsDropdwon = (props) => {
         }
     };
     const [modalOpen, setModalOpen] = React.useState(false);
+    const [shareOpen, setShareOpen] = React.useState(false);
     const dispatch = useDispatch();
     return (
         <React.Fragment>
@@ -43,13 +45,24 @@ const SettingsDropdwon = (props) => {
                         text="Rename"
                         onClick={() => setModalOpen(true)}
                     />
+                    {email === props.owner ? (
+                        <Dropdown.Item
+                            text="Share"
+                            onClick={() => setShareOpen(true)}
+                        />
+                    ) : null}
                     <RenameModal
                         open={modalOpen}
-                        onClose={() => {
-                            setModalOpen(false);
-                        }}
+                        onClose={() => setModalOpen(false)}
                         onSubmit={onSubmit}
                     />
+                    {shareOpen ? (
+                        <ShareModal
+                            id={props.id}
+                            open={shareOpen}
+                            onClose={() => setShareOpen(false)}
+                        />
+                    ) : null}
                 </Dropdown.Menu>
             </Dropdown>
         </React.Fragment>
