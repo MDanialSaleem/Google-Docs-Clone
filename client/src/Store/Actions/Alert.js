@@ -1,6 +1,5 @@
 import { SET_ALERT, REMOVE_ALERT } from "./Types";
-
-const id = 0;
+import { v4 as uuidv4 } from "uuid";
 
 // true is used for success. false is used for failure. the reason
 // that these are encapsualted here as action creators and not dispatched directly by the
@@ -11,7 +10,7 @@ const id = 0;
 const setAlert = (type, message) => ({
     type: SET_ALERT,
     payload: {
-        id: id++,
+        id: uuidv4(),
         type,
         message,
     },
@@ -21,5 +20,7 @@ export const successAlert = (message) => setAlert(true, message);
 export const errorAlert = (message) => setAlert(false, message);
 export const removeAlert = (id) => ({
     type: REMOVE_ALERT,
-    id,
+    payload: {
+        id,
+    },
 });

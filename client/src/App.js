@@ -15,12 +15,15 @@ import Home from "./HomeContainer/Home";
 import Documents from "./DocumentsContainer/Documents";
 import Editor from "./EditorContainer/Editor";
 import Navbar from "./SharedComponents/Navbar";
+import MessageList from "./SharedComponents/MessageList";
+
 function App() {
     useEffect(() => {
         store.dispatch(loadUser());
     }, []);
     return (
         <Provider store={store}>
+            <MessageList />
             <BrowserRouter>
                 <Navbar />
                 <Switch>
