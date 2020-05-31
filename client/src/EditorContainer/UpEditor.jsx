@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { useState, useMemo, useEffect, useContext } from "react";
+import { useState, useMemo, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import openSocket from "socket.io-client";
 import { useSelector } from "react-redux";
@@ -32,6 +32,7 @@ const Editor = (props) => {
     const editorContext = useContext(EditorContext);
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
     const currUserID = useSelector((state) => state.auth.user._id);
+    const innerRef = useRef(null);
 
     useEffect(() => {
         // because effects cannot direcrlt use aync functions.
@@ -40,7 +41,6 @@ const Editor = (props) => {
                 const res = await axios.get("/api/documents/" + id);
                 setName(res.data.name);
                 setValue(res.data.content);
-                console.log(res.data);
                 setOwner(res.data.owner === currUserID);
                 setLoading(false);
             } catch (err) {
@@ -73,7 +73,6 @@ const Editor = (props) => {
         socket.on(SOCKET_ACTIONS.UPDATE_NAME, (payload) => {
             setName(payload.newName);
         });
-
         setSocket(socket);
         return () => {
             socket.emit(SOCKET_ACTIONS.LEAVE_ROOM, {
@@ -99,6 +98,10 @@ const Editor = (props) => {
             newName: name,
         });
     };
+
+    const htmlLoader = () => {
+        return innerRef.current.innerHTML;
+    };
     return !loading ? (
         <div>
             <Slate
@@ -111,11 +114,14 @@ const Editor = (props) => {
                     socket={socket}
                     docID={props.docID}
                     isOwner={owner}
+                    htmlLoader={htmlLoader}
                 />
                 <Row css={style} justify="center">
                     <Col xs={10}>
                         <SubToolBar2 />
-                        <DocEditor />
+                        <div ref={innerRef}>
+                            <DocEditor />
+                        </div>
                     </Col>
                 </Row>
                 <EditorFooter active={activeUser} users={onlineUsers} />

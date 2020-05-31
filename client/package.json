@@ -15,6 +15,7 @@
     "@types/slate-react": "^0.22.9",
     "axios": "^0.19.2",
     "file-saver": "^2.0.2",
+    "html-docx-js": "^0.3.1",
     "react": "^16.13.1",
     "react-color": "^2.18.0",
     "react-dom": "^16.13.1",

@@ -6,6 +6,7 @@ import { useSlate } from "slate-react";
 import { SOCKET_ACTIONS } from "../commonConstants";
 import EditorContext from "./EditorContext/Context";
 import ShareModal from "../SharedComponents/ShareModal";
+import htmlDocx from "html-docx-js/dist/html-docx";
 
 const FileDropdown = () => (
     <Dropdown text="File" color="white">
@@ -15,8 +16,7 @@ const FileDropdown = () => (
         </Dropdown.Menu>
     </Dropdown>
 );
-
-const ExportDropdown = () => {
+const ExportDropdown = (props) => {
     const editor = useSlate();
     const onDownload = () => {
         const blob = new Blob([JSON.stringify(editor.children, null, 2)], {
@@ -24,11 +24,54 @@ const ExportDropdown = () => {
         });
         saveAs(blob, "file.kaghaz");
     };
+
+    const onDocxDownload = () => {
+        var converted = htmlDocx.asBlob(
+            `<!doctype html>
+                <html lang="en">
+                    <head>
+                        <meta charset="utf-8">
+                        <title>File</title>
+                    </head>
+                    <body>
+                        ${props.htmlLoader()}
+                    </body>
+                </html>`,
+            {
+                orientation: "landscape",
+                margins: { top: 720 },
+            }
+        );
+        saveAs(converted, "test.docx");
+    };
+    const onHTMLDownload = () => {
+        const htmlRep = `<!doctype html>
+                <html lang="en">
+                    <head>
+                        <meta charset="utf-8">
+                        <title>File</title>
+                    </head>
+                    <body>
+                        ${props.htmlLoader()}
+                    </body>
+                </html>`;
+        const blob = new Blob([htmlRep], {
+            type: "text/plain;charset=utf-8",
+        });
+        saveAs(blob, "file.html");
+    };
     return (
         <Dropdown text="Export">
             <Dropdown.Menu>
                 <Dropdown.Item text="Download" onClick={onDownload} />
-                <Dropdown.Item text="Email as Attachment" />
+                <Dropdown.Item
+                    text="Download as HTML"
+                    onClick={onHTMLDownload}
+                />
+                <Dropdown.Item
+                    text="Download as DOCX"
+                    onClick={onDocxDownload}
+                />
             </Dropdown.Menu>
         </Dropdown>
     );
@@ -70,7 +113,7 @@ const SubToolbar1 = (props) => {
                     <FileDropdown />
                 </Col>
                 <Col style={{ textAlign: "center" }} xs={3} md={3} lg={3}>
-                    <ExportDropdown />
+                    <ExportDropdown htmlLoader={props.htmlLoader} />
                 </Col>
                 <Col style={{ textAlign: "center" }} xs={3} md={3} lg={3}>
                     <Button disabled={!props.isOwner} onClick={onShareOpen}>
