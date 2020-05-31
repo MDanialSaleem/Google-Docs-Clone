@@ -57,6 +57,18 @@ module.exports = (socket) => {
         }
     });
 
+    socket.on(SOCKET_ACTIONS.UPDATE_NAME, async (payload) => {
+        const document = await Document.findById(payload.document);
+        document.name = payload.newName;
+        await document.save();
+        // to everyone in the server including the value.
+        socketServer
+            .in(toString(payload.document))
+            .emit(SOCKET_ACTIONS.UPDATE_NAME, {
+                newName: payload.newName,
+            });
+    });
+
     socket.on(SOCKET_ACTIONS.EDIT_REQUEST, async (payload, callback) => {
         const userId = jwt.verify(payload.token, keys.jwtSecret).user.id;
         const { name } = await User.findById(userId);
@@ -68,6 +80,7 @@ module.exports = (socket) => {
             room.activeUser = name;
             await room.save();
             callback({ permission: true });
+            //to everyone in the room including the sender.
             socketServer
                 .in(toString(payload.documentId))
                 .emit(SOCKET_ACTIONS.ACTIVE_CHANGED, {

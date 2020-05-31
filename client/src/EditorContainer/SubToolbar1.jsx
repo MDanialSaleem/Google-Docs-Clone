@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Row, Col } from "react-grid-system";
 import { Dropdown, Button } from "semantic-ui-react";
 import { saveAs } from "file-saver";
 import { useSlate } from "slate-react";
 import { SOCKET_ACTIONS } from "../commonConstants";
 import EditorContext from "./EditorContext/Context";
+import ShareModal from "../SharedComponents/ShareModal";
 
 const FileDropdown = () => (
     <Dropdown text="File" color="white">
@@ -35,6 +36,10 @@ const ExportDropdown = () => {
 
 const SubToolbar1 = (props) => {
     const editorContext = useContext(EditorContext);
+    const [shareOpen, setShareOpen] = useState(false);
+    const onShareOpen = () => setShareOpen(true);
+    const onShareClose = () => setShareOpen(false);
+
     const onEditClick = () => {
         props.socket.emit(
             SOCKET_ACTIONS.EDIT_REQUEST,
@@ -68,7 +73,14 @@ const SubToolbar1 = (props) => {
                     <ExportDropdown />
                 </Col>
                 <Col style={{ textAlign: "center" }} xs={3} md={3} lg={3}>
-                    <Button>Collaborate</Button>
+                    <Button disabled={!props.isOwner} onClick={onShareOpen}>
+                        Collaborate
+                    </Button>
+                    <ShareModal
+                        id={props.docID}
+                        onClose={onShareClose}
+                        open={shareOpen}
+                    />
                 </Col>
                 <Col style={{ textAlign: "center" }} xs={3} md={3} lg={3}>
                     <Button.Group>

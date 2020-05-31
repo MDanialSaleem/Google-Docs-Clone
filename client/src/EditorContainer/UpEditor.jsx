@@ -3,6 +3,7 @@ import { jsx } from "@emotion/core";
 import { useState, useMemo, useEffect, useContext } from "react";
 import axios from "axios";
 import openSocket from "socket.io-client";
+import { useSelector } from "react-redux";
 //Own Components.
 import { SOCKET_ACTIONS } from "../commonConstants";
 import Toolbar from "./Toolbar";
@@ -26,10 +27,11 @@ const Editor = (props) => {
     const [socket, setSocket] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activeUser, setActiveUser] = useState(null);
-    const [editState, setEditState] = useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    const [owner, setOwner] = useState(false);
     const editorContext = useContext(EditorContext);
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+    const currUserID = useSelector((state) => state.auth.user._id);
 
     useEffect(() => {
         // because effects cannot direcrlt use aync functions.
@@ -38,6 +40,8 @@ const Editor = (props) => {
                 const res = await axios.get("/api/documents/" + id);
                 setName(res.data.name);
                 setValue(res.data.content);
+                console.log(res.data);
+                setOwner(res.data.owner === currUserID);
                 setLoading(false);
             } catch (err) {
                 console.log(err);
@@ -66,6 +70,10 @@ const Editor = (props) => {
         socket.on(SOCKET_ACTIONS.ACTIVE_CHANGED, (payload) => {
             setActiveUser(payload.active);
         });
+        socket.on(SOCKET_ACTIONS.UPDATE_NAME, (payload) => {
+            setName(payload.newName);
+        });
+
         setSocket(socket);
         return () => {
             socket.emit(SOCKET_ACTIONS.LEAVE_ROOM, {
@@ -84,6 +92,13 @@ const Editor = (props) => {
             token: window.localStorage.token,
         });
     };
+
+    const onNameChnageHandler = (name) => {
+        socket.emit(SOCKET_ACTIONS.UPDATE_NAME, {
+            document: props.docID,
+            newName: name,
+        });
+    };
     return !loading ? (
         <div>
             <Slate
@@ -91,8 +106,12 @@ const Editor = (props) => {
                 value={value}
                 onChange={onChangeEventHandler}
             >
-                <Toolbar name={name} />
-                <SubToolbar1 socket={socket} docID={props.docID} />
+                <Toolbar name={name} onSubmit={onNameChnageHandler} />
+                <SubToolbar1
+                    socket={socket}
+                    docID={props.docID}
+                    isOwner={owner}
+                />
                 <Row css={style} justify="center">
                     <Col xs={10}>
                         <SubToolBar2 />
