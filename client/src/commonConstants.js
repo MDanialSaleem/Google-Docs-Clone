@@ -11,3 +11,7 @@ module.exports.SOCKET_ACTIONS = {
     ACTIVE_CHANGED: "ACTIVE_CHANGED",
     UPDATE_NAME: "UPDATE_NAME",
 };
+module.exports.DOCUMENT_TEMPLATES = {
+    BLANK: "BLANK",
+    LETTER: "LETTER",
+};

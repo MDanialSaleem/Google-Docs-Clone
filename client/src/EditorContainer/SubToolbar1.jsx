@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Row, Col } from "react-grid-system";
 import { Dropdown, Button } from "semantic-ui-react";
 import { saveAs } from "file-saver";
@@ -7,24 +8,28 @@ import { SOCKET_ACTIONS } from "../commonConstants";
 import EditorContext from "./EditorContext/Context";
 import ShareModal from "../SharedComponents/ShareModal";
 import htmlDocx from "html-docx-js/dist/html-docx";
+import { Documents } from "../Utils/RoutingConstants";
 
-const FileDropdown = () => (
-    <Dropdown text="File" color="white">
-        <Dropdown.Menu>
-            <Dropdown.Item text="Delete" />
-            <Dropdown.Item text="Rename" />
-        </Dropdown.Menu>
-    </Dropdown>
-);
-const ExportDropdown = (props) => {
+const FileDropdown = () => {
     const editor = useSlate();
+    const history = useHistory();
     const onDownload = () => {
         const blob = new Blob([JSON.stringify(editor.children, null, 2)], {
             type: "text/plain;charset=utf-8",
         });
         saveAs(blob, "file.kaghaz");
     };
-
+    const onClose = () => history.push(Documents);
+    return (
+        <Dropdown text="File" color="white">
+            <Dropdown.Menu>
+                <Dropdown.Item text="Download" onClick={onDownload} />
+                <Dropdown.Item text="Close" onClick={onClose} />
+            </Dropdown.Menu>
+        </Dropdown>
+    );
+};
+const ExportDropdown = (props) => {
     const onDocxDownload = () => {
         var converted = htmlDocx.asBlob(
             `<!doctype html>
@@ -63,7 +68,6 @@ const ExportDropdown = (props) => {
     return (
         <Dropdown text="Export">
             <Dropdown.Menu>
-                <Dropdown.Item text="Download" onClick={onDownload} />
                 <Dropdown.Item
                     text="Download as HTML"
                     onClick={onHTMLDownload}

@@ -3,7 +3,10 @@ const { check, validationResult } = require("express-validator");
 const Document = require("../models/Document");
 const User = require("../models/User");
 const authMiddleware = require("../middleware/auth");
-
+const DOCUMENT_TEMPLATES = require("../../client/src/commonConstants")
+    .DOCUMENT_TEMPLATES;
+const BlankValue = require("../models/Constants/BlankTemplate");
+const LetterValue = require("../models/Constants/LetterTemplate");
 const router = express.Router();
 
 // This file describes routes for handling documents. It includes
@@ -19,6 +22,10 @@ router.post(
             "name",
             "Name must be a string with at max 20 characters"
         ).isLength({ max: 20 }),
+        check("template", "Template must be present").isIn([
+            DOCUMENT_TEMPLATES.BLANK,
+            DOCUMENT_TEMPLATES.LETTER, //should map instead of writing in the event of more templates.
+        ]),
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -29,12 +36,16 @@ router.post(
             });
         }
 
-        const { name } = req.body;
+        const { name, template } = req.body;
 
         try {
             let document = new Document({
                 name: name,
                 owner: req.user.id,
+                content: // shoudl map here as well  in the event of more templates.
+                    template === DOCUMENT_TEMPLATES.BLANK
+                        ? BlankValue
+                        : LetterValue,
             });
 
             await document.save();

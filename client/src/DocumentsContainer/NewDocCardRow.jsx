@@ -3,12 +3,11 @@ import NewDocCard from "./NewDocCard";
 import BlankImg from "../Assets/Images/Templates/Blank.png";
 import { Row, Col, Hidden, Visible } from "react-grid-system";
 import LetterImg from "../Assets/Images/Templates/Letter.png";
-import { Button } from "semantic-ui-react";
-import * as Paths from "../Utils/RoutingConstants";
-import { Link } from "react-router-dom";
+import { Dropdown } from "semantic-ui-react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loadUser } from "../Store/Actions/Auth";
+import { DOCUMENT_TEMPLATES } from "../commonConstants";
 
 const styles = {
     background: "lightgrey",
@@ -18,7 +17,7 @@ const styles = {
 const NewDocCardRow = () => {
     const dispatch = useDispatch();
 
-    const onClickHandler = async () => {
+    const createDocument = async (template) => {
         const config = {
             headers: {
                 "Content-Type": "application/json",
@@ -27,6 +26,7 @@ const NewDocCardRow = () => {
 
         const body = JSON.stringify({
             name: "Untitled",
+            template,
         });
 
         try {
@@ -37,6 +37,12 @@ const NewDocCardRow = () => {
             console.log(JSON.stringify(err));
         }
     };
+
+    const onBlankHandler = createDocument.bind(null, DOCUMENT_TEMPLATES.BLANK);
+    const onLetterHandler = createDocument.bind(
+        null,
+        DOCUMENT_TEMPLATES.LETTER
+    );
     return (
         <div style={styles}>
             <Hidden sm xs>
@@ -47,10 +53,10 @@ const NewDocCardRow = () => {
                 </Row>
 
                 <Row justify="center">
-                    <Col xs="content" onClick={onClickHandler}>
+                    <Col xs="content" onClick={onBlankHandler}>
                         <NewDocCard title="Blank" imageUrl={BlankImg} />
                     </Col>
-                    <Col xs="content">
+                    <Col xs="content" onClick={onLetterHandler}>
                         <NewDocCard title="Letter" imageUrl={LetterImg} />
                     </Col>
                 </Row>
@@ -58,9 +64,18 @@ const NewDocCardRow = () => {
 
             <Visible sm xs>
                 <Row style={{ paddingBottom: "5px" }} justify="center">
-                    <Button color="black" onClick={onClickHandler}>
-                        Create a New Document
-                    </Button>
+                    <Dropdown text="Create A New Document" color="black">
+                        <Dropdown.Menu>
+                            <Dropdown.Item
+                                text="Blank"
+                                onClick={onBlankHandler}
+                            />
+                            <Dropdown.Item
+                                text="Letter"
+                                onClick={onLetterHandler}
+                            />
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </Row>
             </Visible>
         </div>
