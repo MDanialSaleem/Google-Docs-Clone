@@ -7,6 +7,7 @@ const DOCUMENT_TEMPLATES = require("../../client/src/commonConstants")
     .DOCUMENT_TEMPLATES;
 const BlankValue = require("../models/Constants/BlankTemplate");
 const LetterValue = require("../models/Constants/LetterTemplate");
+const CONFIG = require("../constants");
 const router = express.Router();
 
 // This file describes routes for handling documents. It includes
@@ -84,36 +85,73 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     }
 });
 
-// GET /api/documents. Used to get all documents of a single user.
-router.get("/", authMiddleware, async (req, res) => {
+// GET /api/documents/count. Used to get the count of documents of a user for pagination.
+router.get("/count", authMiddleware, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id)
-            .select("email")
-            .populate({
-                path: "owndocs",
-                select: "name lastModified",
-                populate: {
-                    path: "owner",
-                    select: "email",
-                },
-            })
-            .populate({
-                path: "colabdocs",
-                select: "name lastModified",
-                populate: {
-                    path: "owner",
-                    select: "email",
-                },
-            });
-        return res.status(200).json(user);
+        const count = await Document.find({
+            $or: [{ owner: req.user.id }, { collaborators: req.user.id }],
+        }).count();
+
+        return res.status(200).json({ count });
     } catch (error) {
         console.log(error.message);
         return res.status(500).send("Server error");
     }
 });
 
-// GET /api/documents/:id. Used to get a single document.
-router.get("/:id", authMiddleware, async (req, res) => {
+// GET /api/documents/all/:id. Used to get all documents of a single user.
+router.get("/all/:id", authMiddleware, async (req, res) => {
+    const page = req.params.id;
+    try {
+        const documents = await Document.find({
+            $or: [{ owner: req.user.id }, { collaborators: req.user.id }],
+        })
+            .select("-content")
+            .sort({
+                lastModified: "desc",
+            })
+            .limit(CONFIG.pageSize)
+            .skip((page - 1) * CONFIG.pageSize);
+
+        return res.status(200).json(documents);
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).send("Server error");
+    }
+});
+
+//THIS IS THE OLDER ROUTE THAT USES VIRTUALS. PAGINATION WAS CAUSING ISSUES (NOT THAT IT WAS IMPOSSIBLE) WITH VRITUALS
+//HENC ETHE SHIFT TO NEWER METHOD.
+// GET /api/documents. Used to get all documents of a single user.
+// router.get("/", authMiddleware, async (req, res) => {
+//     try {
+//         const user = await User.findById(req.user.id)
+//             .select("email")
+//             .populate({
+//                 path: "owndocs",
+//                 select: "name lastModified",
+//                 populate: {
+//                     path: "owner",
+//                     select: "email",
+//                 },
+//             })
+//             .populate({
+//                 path: "colabdocs",
+//                 select: "name lastModified",
+//                 populate: {
+//                     path: "owner",
+//                     select: "email",
+//                 },
+//             });
+//         return res.status(200).json(user);
+//     } catch (error) {
+//         console.log(error.message);
+//         return res.status(500).send("Server error");
+//     }
+// });
+
+// GET /api/documents/one/:id. Used to get a single document.
+router.get("/one/:id", authMiddleware, async (req, res) => {
     try {
         const document = await Document.findById(req.params.id);
         if (!document) {
