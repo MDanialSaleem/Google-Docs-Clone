@@ -1,6 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
 const { check, validationResult } = require("express-validator");
 const User = require("../models/User");
 const authMiddleware = require("../middleware/auth");
@@ -11,6 +13,58 @@ const router = express.Router();
 // 1. Registering users.
 // 2. Logging In users.
 // 3. Getting user profile.
+
+const transporter = nodemailer.createTransport(
+    sendgridTransport({
+        auth: {
+            api_key: keys.sendgridKey,
+        },
+    })
+);
+
+// GET /api/users/resetpasswordtoken.
+router.get("/resetpasswordtoken/:email", async (req, res) => {
+    try {
+        const email = req.params.email;
+        const payload = {
+            user: {
+                email: req.params.email,
+            },
+        };
+
+        const user = User.find({ email });
+        if (!user) {
+            // You might want to tell the client that the email does not exist but that is a potential security flaw
+            // which lets someone query our application for which addresses are registered.
+            return res.status(200).send("OK");
+        }
+        jwt.sign(
+            payload,
+            keys.jwtSecret,
+            { expiresIn: 10 * 60 }, //5 mins
+            async (err, token) => {
+                if (err) {
+                    throw err;
+                }
+
+                await transporter.sendMail({
+                    to: email,
+                    from: "danialsaleem2010@gmail.com",
+                    subject: "Email Reset Request",
+                    html: `
+                        <h1>You requested a password reset for you Kaghaz account.</h1>
+                        <div>Find your token below and paste it in your kaghaz popup</div>
+                        <div>${token}</div>
+                        `,
+                });
+                res.status(200).send("OK");
+            }
+        );
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).send("Server side error");
+    }
+});
 
 //GET /api/users
 router.get("/", authMiddleware, async (req, res) => {
@@ -23,6 +77,57 @@ router.get("/", authMiddleware, async (req, res) => {
     }
 });
 
+//POST /api/users/login
+router.post(
+    "/resetpassword",
+    [
+        check("token", "Token is required").exists(),
+        check("password", "Password is required").exists(),
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { token, password } = req.body;
+        let email = null;
+        try {
+            const decoded = jwt.verify(token, keys.jwtSecret);
+            email = decoded.user.email;
+        } catch (err) {
+            return res.status(400).json({
+                errors: [
+                    {
+                        message: "Invalid credentials",
+                    },
+                ],
+            });
+        }
+
+        try {
+            let user = await User.findOne({ email });
+            if (!user) {
+                return res.status(400).json({
+                    errors: [
+                        {
+                            message: "Invalid credentials",
+                        },
+                    ],
+                });
+            }
+
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
+            await user.save();
+            return res.status(200).send("Password Reset. Proceed to login");
+        } catch (error) {
+            console.log(error.message);
+            return res.status(500).send("Server side error");
+        }
+    }
+);
 //POST /api/users/login
 router.post(
     "/login",
