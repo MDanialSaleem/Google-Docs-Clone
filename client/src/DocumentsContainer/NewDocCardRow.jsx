@@ -5,8 +5,8 @@ import { Row, Col, Hidden, Visible } from "react-grid-system";
 import LetterImg from "../Assets/Images/Templates/Letter.png";
 import { Dropdown } from "semantic-ui-react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { loadDocuments } from "../Store/Actions/Document";
+import { useDispatch, useSelector } from "react-redux";
+import { loadDocuments, updateCount } from "../Store/Actions/Document";
 import { DOCUMENT_TEMPLATES } from "../commonConstants";
 
 const styles = {
@@ -16,7 +16,7 @@ const styles = {
 
 const NewDocCardRow = () => {
     const dispatch = useDispatch();
-
+    const activePage = useSelector((state) => state.document.activePage);
     const createDocument = async (template) => {
         const config = {
             headers: {
@@ -31,7 +31,8 @@ const NewDocCardRow = () => {
 
         try {
             await axios.post("/api/documents/", body, config);
-            dispatch(loadDocuments());
+            dispatch(updateCount());
+            dispatch(loadDocuments(activePage));
         } catch (err) {
             console.log(JSON.stringify(err));
         }

@@ -3,15 +3,17 @@ import { Dropdown } from "semantic-ui-react";
 import RenameModal from "../SharedComponents/RenameModal";
 import ShareModal from "../SharedComponents/ShareModal";
 import { useDispatch, useSelector } from "react-redux";
-import { loadDocuments } from "../Store/Actions/Document";
+import { loadDocuments, updateCount } from "../Store/Actions/Document";
 import axios from "axios";
 
 const SettingsDropdwon = (props) => {
+    const dispatch = useDispatch();
     const email = useSelector((state) => state.auth.user.email);
+    const activePage = useSelector((state) => state.document.activePage);
     const deleteDoc = async () => {
         try {
             await axios.delete("/api/documents/" + props.id);
-            dispatch(loadDocuments());
+            dispatch(updateCount());
         } catch (err) {
             console.log(err.response);
         }
@@ -26,14 +28,13 @@ const SettingsDropdwon = (props) => {
         const body = JSON.stringify({ name });
         try {
             await axios.put(`/api/documents/${props.id}`, body, config);
-            dispatch(loadDocuments());
+            dispatch(loadDocuments(activePage));
         } catch (error) {
             console.log("server error");
         }
     };
     const [modalOpen, setModalOpen] = React.useState(false);
     const [shareOpen, setShareOpen] = React.useState(false);
-    const dispatch = useDispatch();
     return (
         <React.Fragment>
             <Dropdown icon="ellipsis vertical">

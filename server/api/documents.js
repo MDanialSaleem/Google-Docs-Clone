@@ -90,7 +90,7 @@ router.get("/count", authMiddleware, async (req, res) => {
     try {
         const count = await Document.find({
             $or: [{ owner: req.user.id }, { collaborators: req.user.id }],
-        }).count();
+        }).countDocuments();
 
         return res.status(200).json({ count });
     } catch (error) {
@@ -107,6 +107,10 @@ router.get("/all/:id", authMiddleware, async (req, res) => {
             $or: [{ owner: req.user.id }, { collaborators: req.user.id }],
         })
             .select("-content")
+            .populate({
+                path: "owner",
+                select: "email",
+            })
             .sort({
                 lastModified: "desc",
             })

@@ -38,7 +38,7 @@ const Editor = (props) => {
         // because effects cannot direcrlt use aync functions.
         const fetchDoc = async (id) => {
             try {
-                const res = await axios.get("/api/documents/one" + id);
+                const res = await axios.get("/api/documents/one/" + id);
                 setName(res.data.name);
                 setValue(res.data.content);
                 setOwner(res.data.owner === currUserID);

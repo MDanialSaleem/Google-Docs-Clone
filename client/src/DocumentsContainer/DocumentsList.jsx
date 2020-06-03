@@ -1,4 +1,6 @@
-import React, { useEffect } from "react";
+/** @jsx jsx */
+import { jsx } from "@emotion/core";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DocumentItem from "./DocumentItem";
 import SmallerScreenDocItem from "./SmallerScreenDocItem";
@@ -6,6 +8,7 @@ import { Row, Col, Hidden, Visible } from "react-grid-system";
 import { useHistory } from "react-router-dom";
 import { Editor } from "../Utils/RoutingConstants";
 import { loadDocuments } from "../Store/Actions/Document";
+import Pagination from "./Pagination";
 
 // TODO-MAYBE: Might want to encapsualte the two different visualizations of indivuals documents into another file
 // and do the visibilty check (based on screen size) there.
@@ -30,28 +33,35 @@ const formatLastModified = (datastr) => {
 };
 
 const DocumentList = () => {
-    const documents = useSelector((state) => state.document.owndocs);
-    const shareddocuments = useSelector((state) => state.document.colabdocs);
+    const documents = useSelector((state) => state.document.documents);
     const dispatch = useDispatch();
     const history = useHistory();
     useEffect(() => {
-        dispatch(loadDocuments());
+        dispatch(loadDocuments(1));
     }, []);
 
     const onClickHandler = (id) => history.push(Editor + "/" + id);
+
     return (
-        <div>
+        <div css={{ marginTop: "10px" }}>
+            <Row justify="center">
+                <Pagination />
+            </Row>
             <Hidden sm xs>
                 <Row justify="center">
                     <Col xs={12}>
-                        {documents.concat(shareddocuments).map((val) => (
+                        {documents.map((val) => (
                             <div onClick={() => onClickHandler(val._id)}>
                                 <DocumentItem
                                     key={val.name}
                                     type="doc"
                                     name={val.name}
                                     owner={val.owner.email}
-                                    isShared={val.collaborators ? true : false}
+                                    isShared={
+                                        val.collaborators.length > 0
+                                            ? true
+                                            : false
+                                    }
                                     timeAccessed={formatLastModified(
                                         val.lastModified
                                     )}
@@ -64,7 +74,7 @@ const DocumentList = () => {
             </Hidden>
             <Visible sm xs>
                 <Row>
-                    {documents.concat(shareddocuments).map((val) => (
+                    {documents.map((val) => (
                         <Col
                             xs={12}
                             sm={6}
@@ -75,7 +85,9 @@ const DocumentList = () => {
                                 type="doc"
                                 name={val.name}
                                 owner={val.owner.email}
-                                isShared={val.collaborators ? true : false}
+                                isShared={
+                                    val.collaborators.length > 0 ? true : false
+                                }
                                 timeAccessed={formatLastModified(
                                     val.lastModified
                                 )}

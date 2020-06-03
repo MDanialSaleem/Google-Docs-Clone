@@ -1,8 +1,9 @@
-import { LOAD_DOCUMENTS } from "../Actions/Types";
+import { LOAD_DOCUMENTS, UPDATE_COUNT } from "../Actions/Types";
 
 const initialState = {
-    owndocs: [],
-    colabdocs: [],
+    documents: [],
+    count: 0,
+    activePage: 1,
 };
 
 export default (state = initialState, action) => {
@@ -12,8 +13,12 @@ export default (state = initialState, action) => {
         case LOAD_DOCUMENTS:
             return {
                 ...state,
-                owndocs: payload.owndocs,
-                colabdocs: payload.colabdocs,
+                ...payload,
+            };
+        case UPDATE_COUNT:
+            return {
+                ...state,
+                ...payload,
             };
         default:
             return state;
