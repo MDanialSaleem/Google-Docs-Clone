@@ -53,7 +53,7 @@ router.get("/resetpasswordtoken/:email", async (req, res) => {
                     subject: "Email Reset Request",
                     html: `
                         <h1>You requested a password reset for you Kaghaz account.</h1>
-                        <div>Find your token below and paste it in your kaghaz popup</div>
+                        <div>Find your token below and paste it in your kaghaz popup. It will be valid for 10 minutes.</div>
                         <div>${token}</div>
                         `,
                 });

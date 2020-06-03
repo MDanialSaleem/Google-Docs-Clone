@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Container, Row, Col, Hidden } from "react-grid-system";
-import { Button, Input, Segment, Form, Modal } from "semantic-ui-react";
+import { Button, Segment } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import { Documents } from "../Utils/RoutingConstants";
 import Image from "../Assets/Images/Templates/Form.jpg";
 import Socials from "./Socials";
 import SignInForm from "./SignInForm";
+import ForgotPassword from "./ForgotPassword";
 
 const colStyle = {
     display: "flex",
@@ -23,30 +24,6 @@ const signUpStyle = {
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
 };
-
-const ModalPassword = () => (
-    <Modal
-        trigger={
-            <Button color="black" style={{ marginBottom: 5 }}>
-                Forgot your password?
-            </Button>
-        }
-    >
-        <Modal.Header>Reset your Password</Modal.Header>
-        <Modal.Content>
-            <Modal.Description>
-                <Input
-                    type="email"
-                    style={{ marginBottom: 5 }}
-                    placeholder="Email"
-                />
-                <p>An email to reset your password will be sent to you.</p>
-                <p>It might take 3-5 minutes for you to recieve the email.</p>
-            </Modal.Description>
-        </Modal.Content>
-    </Modal>
-);
-
 const SignIn = (props) => {
     const history = useHistory();
     const onClickHandler = () => history.push(Documents);
@@ -82,7 +59,7 @@ const SignIn = (props) => {
                             or, Sign Up
                         </Button>
                     </Hidden>
-                    <ModalPassword></ModalPassword>
+                    <ForgotPassword />
                 </Col>
                 <Hidden xs>
                     <Col xs={3} sm={4} md={3} style={signUpStyle}>
@@ -109,11 +86,6 @@ const SignIn = (props) => {
 
 SignIn.propTypes = {
     noAccountHandler: PropTypes.func.isRequired,
-    forgotPasswordHandler: PropTypes.func.isRequired,
-};
-
-SignIn.defaultProps = {
-    forgotPasswordHandler: () => console.log("No hander implemented"),
 };
 
 export default SignIn;
