@@ -6,7 +6,7 @@ import LetterImg from "../Assets/Images/Templates/Letter.png";
 import { Dropdown } from "semantic-ui-react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { loadUser } from "../Store/Actions/Auth";
+import { loadDocuments } from "../Store/Actions/Document";
 import { DOCUMENT_TEMPLATES } from "../commonConstants";
 
 const styles = {
@@ -31,9 +31,8 @@ const NewDocCardRow = () => {
 
         try {
             await axios.post("/api/documents/", body, config);
-            dispatch(loadUser());
+            dispatch(loadDocuments());
         } catch (err) {
-            alert("error");
             console.log(JSON.stringify(err));
         }
     };

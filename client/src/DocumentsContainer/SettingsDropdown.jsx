@@ -3,7 +3,7 @@ import { Dropdown } from "semantic-ui-react";
 import RenameModal from "../SharedComponents/RenameModal";
 import ShareModal from "../SharedComponents/ShareModal";
 import { useDispatch, useSelector } from "react-redux";
-import { loadUser } from "../Store/Actions/Auth";
+import { loadDocuments } from "../Store/Actions/Document";
 import axios from "axios";
 
 const SettingsDropdwon = (props) => {
@@ -11,7 +11,7 @@ const SettingsDropdwon = (props) => {
     const deleteDoc = async () => {
         try {
             await axios.delete("/api/documents/" + props.id);
-            dispatch(loadUser());
+            dispatch(loadDocuments());
         } catch (err) {
             console.log(err.response);
         }
@@ -26,7 +26,7 @@ const SettingsDropdwon = (props) => {
         const body = JSON.stringify({ name });
         try {
             await axios.put(`/api/documents/${props.id}`, body, config);
-            dispatch(loadUser());
+            dispatch(loadDocuments());
         } catch (error) {
             console.log("server error");
         }

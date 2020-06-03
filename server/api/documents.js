@@ -42,7 +42,8 @@ router.post(
             let document = new Document({
                 name: name,
                 owner: req.user.id,
-                content: // shoudl map here as well  in the event of more templates.
+                // shoudl map here as well  in the event of more templates.
+                content:
                     template === DOCUMENT_TEMPLATES.BLANK
                         ? BlankValue
                         : LetterValue,
@@ -80,6 +81,34 @@ router.delete("/:id", authMiddleware, async (req, res) => {
             return res.status(404).send("Document not found");
         }
         return res.status(500).send("serverside errors");
+    }
+});
+
+// GET /api/documents. Used to get all documents of a single user.
+router.get("/", authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id)
+            .select("email")
+            .populate({
+                path: "owndocs",
+                select: "name lastModified",
+                populate: {
+                    path: "owner",
+                    select: "email",
+                },
+            })
+            .populate({
+                path: "colabdocs",
+                select: "name lastModified",
+                populate: {
+                    path: "owner",
+                    select: "email",
+                },
+            });
+        return res.status(200).json(user);
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).send("Server error");
     }
 });
 

@@ -15,24 +15,7 @@ const router = express.Router();
 //GET /api/users
 router.get("/", authMiddleware, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id)
-            .select("-password -id")
-            .populate({
-                path: "owndocs",
-                select: "name lastModified",
-                populate: {
-                    path: "owner",
-                    select: "email",
-                },
-            })
-            .populate({
-                path: "colabdocs",
-                select: "name lastModified",
-                populate: {
-                    path: "owner",
-                    select: "email",
-                },
-            });
+        const user = await User.findById(req.user.id).select("-password -id");
         return res.status(200).json(user);
     } catch (error) {
         console.log(error.message);

@@ -1,10 +1,11 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import DocumentItem from "./DocumentItem";
 import SmallerScreenDocItem from "./SmallerScreenDocItem";
 import { Row, Col, Hidden, Visible } from "react-grid-system";
 import { useHistory } from "react-router-dom";
 import { Editor } from "../Utils/RoutingConstants";
+import { loadDocuments } from "../Store/Actions/Document";
 
 // TODO-MAYBE: Might want to encapsualte the two different visualizations of indivuals documents into another file
 // and do the visibilty check (based on screen size) there.
@@ -29,12 +30,15 @@ const formatLastModified = (datastr) => {
 };
 
 const DocumentList = () => {
-    const documents = useSelector((state) => state.auth.user.owndocs);
-    const shareddocuments = useSelector((state) => state.auth.user.colabdocs);
+    const documents = useSelector((state) => state.document.owndocs);
+    const shareddocuments = useSelector((state) => state.document.colabdocs);
+    const dispatch = useDispatch();
     const history = useHistory();
-    const onClickHandler = (id) => history.push(Editor + "/" + id);
+    useEffect(() => {
+        dispatch(loadDocuments());
+    }, []);
 
-    // THE LISTING IS A TEMP FIX.
+    const onClickHandler = (id) => history.push(Editor + "/" + id);
     return (
         <div>
             <Hidden sm xs>
@@ -61,7 +65,11 @@ const DocumentList = () => {
             <Visible sm xs>
                 <Row>
                     {documents.concat(shareddocuments).map((val) => (
-                        <Col xs={12} sm={6} onClick={() => onClickHandler(val._id)}>
+                        <Col
+                            xs={12}
+                            sm={6}
+                            onClick={() => onClickHandler(val._id)}
+                        >
                             <SmallerScreenDocItem
                                 key={val.name}
                                 type="doc"
