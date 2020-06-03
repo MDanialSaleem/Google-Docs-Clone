@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Row, Col } from "react-grid-system";
-import { Dropdown, Button } from "semantic-ui-react";
+import { Dropdown, Button, Modal } from "semantic-ui-react";
 import { saveAs } from "file-saver";
 import { useSlate } from "slate-react";
 import { SOCKET_ACTIONS } from "../commonConstants";
@@ -110,16 +110,47 @@ const SubToolbar1 = (props) => {
             }
         );
     };
+    const styles = { textAlign: "center", marginBottom: "5px" };
     return (
         <div style={{ background: "grey", padding: 5 }}>
             <Row align="center">
-                <Col style={{ textAlign: "center" }} xs={3} md={3} lg={3}>
+                <Col style={styles} xs={6} md={2}>
                     <FileDropdown />
                 </Col>
-                <Col style={{ textAlign: "center" }} xs={3} md={3} lg={3}>
+                <Col style={styles} xs={6} md={2}>
                     <ExportDropdown htmlLoader={props.htmlLoader} />
                 </Col>
-                <Col style={{ textAlign: "center" }} xs={3} md={3} lg={3}>
+                <Col style={styles} xs={6} md={2}>
+                    <Modal trigger={<Button>Help</Button>} closeIcon>
+                        <Modal.Header>Help</Modal.Header>
+                        <Modal.Content image>
+                            <Modal.Description>
+                                <ul>
+                                    <li>
+                                        Use the toolbar with with icons to
+                                        insert formatted text.
+                                    </li>
+                                    <li>
+                                        To edit the document, press the edit
+                                        button, if no one else is editing you
+                                        will be able to edit the document.
+                                    </li>
+                                    <li>
+                                        After you are done editing please let go
+                                        of the edit rights by clicking the View
+                                        button.
+                                    </li>
+                                    <li>
+                                        You can add collaborators, export
+                                        document and see who else is editing by
+                                        clicking on the requried button.
+                                    </li>
+                                </ul>
+                            </Modal.Description>
+                        </Modal.Content>
+                    </Modal>
+                </Col>
+                <Col style={styles} xs={6} md={2}>
                     <Button disabled={!props.isOwner} onClick={onShareOpen}>
                         Collaborate
                     </Button>
@@ -129,7 +160,7 @@ const SubToolbar1 = (props) => {
                         open={shareOpen}
                     />
                 </Col>
-                <Col style={{ textAlign: "center" }} xs={3} md={3} lg={3}>
+                <Col style={styles} xs={6} md={2}>
                     <Button.Group>
                         <Button
                             disabled={editorContext.editable}

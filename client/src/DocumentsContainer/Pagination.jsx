@@ -17,7 +17,6 @@ export default () => {
     return (
         <Pagination
             activePage={activePage}
-            defaultActivePage={1}
             totalPages={totalPages}
             siblingRange={2}
             boundaryRange={0}

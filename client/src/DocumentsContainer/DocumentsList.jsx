@@ -51,9 +51,11 @@ const DocumentList = () => {
                 <Row justify="center">
                     <Col xs={12}>
                         {documents.map((val) => (
-                            <div onClick={() => onClickHandler(val._id)}>
+                            <div
+                                onClick={() => onClickHandler(val._id)}
+                                key={val._id}
+                            >
                                 <DocumentItem
-                                    key={val.name}
                                     type="doc"
                                     name={val.name}
                                     owner={val.owner.email}
@@ -79,9 +81,9 @@ const DocumentList = () => {
                             xs={12}
                             sm={6}
                             onClick={() => onClickHandler(val._id)}
+                            key={val._id}
                         >
                             <SmallerScreenDocItem
-                                key={val.name}
                                 type="doc"
                                 name={val.name}
                                 owner={val.owner.email}

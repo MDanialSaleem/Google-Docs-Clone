@@ -89,7 +89,6 @@ export default () => {
                     Forgot your password?
                 </Button>
             }
-            dimmer={false}
             onClose={() => setInitialDone(false)}
             closeIcon
         >
